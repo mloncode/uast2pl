@@ -34,7 +34,7 @@ we get following *UAST*:
 |   |   + Node
 |   |   |   @typeuast:Comment
 |   |   |   Block: false
-|   |   |   Prefix 
+|   |   |   Prefix
 |   |   |   Suffix
 |   |   |   Tab
 |   |   |   Text: hello.java
@@ -53,7 +53,7 @@ we get following *UAST*:
 ...
 ```
 
-which can be transpiled to prolog program:
+what can be transformed into a prolog program:
 ```prolog
 % ...
 role0('Identifier').
@@ -71,11 +71,10 @@ import0(['uast:Import', Path, Pos]) :- qualified_identifier0(Path),positions2(Po
 
 ```
 
-Now, we can query DB:
+Next, we can query DB:
 ```prolog
-% get paths, columns and line number for the first import
+% get paths, columns and line number for the first import(['uast:Import', Path, Pos]).
 
-%- import(['uast:Import', Path, Pos])
 ?- import0([_, [_, [[_, Path1, [_, [_, Col1, Line1, _], _], _], [_, Path2, [_, [_, Col2, Line2, _], _], _]], _], _]).
 
 % Path1 = java,
