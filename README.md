@@ -56,13 +56,16 @@ we get following *UAST*:
 which can be transpiled to prolog program:
 ```prolog
 % ...
+role0('Identifier').
 value1('java:CompilationUnit').
 comment0(['uast:Comment', ' ', '', '', 'hello.java', false, Pos]) :- positions1(Pos).
+positions4(['uast:Positions', Start, End]) :- position5(Start), position7(End).
 identifier0(['uast:Identifier', 'java', Pos, [Role0]]) :- positions4(Pos),role0(Role0).
-identifier2(['uast:Identifier', 'javax', Pos, [Role0]]) :- positions8(Pos),role0(Role0).
+identifier1(['uast:Identifier', 'io', Pos, [Role0]]) :- positions5(Pos),role0(Role0).
 value4('java:Modifier').
 value8('java:SimpleType').
 value10('java:TypeDeclaration').
+qualified_identifier0(['uast:QualifiedIdentifier', [Name0,Name1], Pos]) :- positions3(Pos),identifier0(Name0),identifier1(Name1).
 % ...
 
 ```
