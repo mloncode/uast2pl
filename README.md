@@ -72,12 +72,12 @@ Now, we can query DB:
 % get paths, columns and line number for the first import
 
 %- import(['uast:Import', Path, Pos])
-?- import0([_, [_, [[_, Path1, [_, [_, Col1, Line, _], _], _], [_, Path2, [_, [_, Col2, Line, _], _], _]], _], _]).
+?- import0([_, [_, [[_, Path1, [_, [_, Col1, Line1, _], _], _], [_, Path2, [_, [_, Col2, Line2, _], _], _]], _], _]).
 
 % Path1 = java,
 % Col1 = 8,
 
-% Line = 2,
+% Line1 = Line2, Line2 = 2,
 
 % Path2 = io,
 % Col2 = 13.
