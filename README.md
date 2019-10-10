@@ -66,6 +66,7 @@ value4('java:Modifier').
 value8('java:SimpleType').
 value10('java:TypeDeclaration').
 qualified_identifier0(['uast:QualifiedIdentifier', [Name0,Name1], Pos]) :- positions3(Pos),identifier0(Name0),identifier1(Name1).
+import0(['uast:Import', Path, Pos]) :- qualified_identifier0(Path),positions2(Pos).
 % ...
 
 ```
