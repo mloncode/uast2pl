@@ -764,7 +764,7 @@ func (pl *uast2pl) writeAlias(a uast.Alias) (string, error) {
 }
 
 // writeImport writes  uast Import as prolog predicate:
-// import(['uast:Import', Path, Pos']) :- positions(Pos), path(Path)
+// import(['uast:Import', Path, Pos]) :- positions(Pos), path(Path)
 func (pl *uast2pl) writeImport(i uast.Import) (string, error) {
 	format := "%s(['%s', Path, Pos])"
 
