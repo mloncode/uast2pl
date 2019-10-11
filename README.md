@@ -14,12 +14,12 @@ def fib(n, a = 0, b = 1):
     return fib(n - 1, b, a + b);
 ```
 
-we get following *UAST*
+we get following *UAST*:
 <details>
 <summary>UAST</summary>
 <p>
     
-```json
+```
 { '@type': "python:Module",
    '@role': [File, Module],
    '@pos': { '@type': "uast:Positions",
