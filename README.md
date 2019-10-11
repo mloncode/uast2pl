@@ -2,6 +2,30 @@
 This is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-specification-v2.html) to Prolog transpiler.
 It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
+### Tools
+- ./cmd/uast2pl: transforms _uast_ into a prolog program.
+```bash
+Usage of ./uast2pl:
+  -f string
+    	input file to parse
+  -o string
+    	output file (by default stdio)
+  -s string
+    	address:port of babelfish server (default "localhost:9432")
+```
+
+- ./cmd/query: embedded _wam_ lets query prolog DB.
+```bash
+Usage of ./query:
+  -f value
+    	list of input prolog files
+  -o string
+    	output file (by default stdio)
+  -q string
+    	prolog query
+  -v value
+    	list of variables to print
+```
 
 ### Example
 For a given fib.py file:
