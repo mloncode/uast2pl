@@ -65,6 +65,10 @@ github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hd
 github.com/mcuadros/go-lookup v0.0.0-20171110082742-5650f26be767 h1:BrhJNdEFWGuiJk/3/SwsG5Rex3zjFxYsDi2bpd7382Y=
 github.com/mcuadros/go-lookup v0.0.0-20171110082742-5650f26be767/go.mod h1:ct+byCpkFokm4J0tiuAvB8cf2ttm6GcCe89Yr25nGKg=
 github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b/go.mod h1:01TrycV0kFyexm33Z7vhZRXopbI8J3TDReVlkTgMUxE=
+github.com/mndrix/golog v0.0.0-20170330170653-a28e2a269775 h1:KPqf9x/eMg3ZnHATLXcM1OgQMNVkPUv1QcGv6zTRMRg=
+github.com/mndrix/golog v0.0.0-20170330170653-a28e2a269775/go.mod h1:Q4YHYl483MNk6wwg3g8YsINpKe5S2UzUJCRSRlFaSU0=
+github.com/mndrix/ps v0.0.0-20170330174427-18e65badd6ab h1:fPrYMvMnWuED0MLhLyrny1fLaHhtiXK30pNyBGrk9Gs=
+github.com/mndrix/ps v0.0.0-20170330174427-18e65badd6ab/go.mod h1:dHgTaDInzkAqJv67VaX1IkK449M2UoBY68CZeI/bNCU=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.8.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/gomega v1.5.0/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=

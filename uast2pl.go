@@ -292,7 +292,7 @@ func (pl *uast2pl) writeObject(obj nodes.Object) (string, error) {
 		if len(objects) == 0 {
 			format = strings.Replace(format, "Obj", "_", 1)
 		} else {
-			format += " :- " + strings.Join(objects, ";")
+			format += " :- !," + strings.Join(objects, ";")
 		}
 
 		fn := fmt.Sprintf("object%d", len(pl.objects))
@@ -629,16 +629,22 @@ func (pl *uast2pl) writeFunctionGroup(g uast.FunctionGroup) (string, error) {
 		vars  []string
 	)
 	for _, any := range g.Nodes {
-		if node, ok := any.(nodes.Node); ok {
-			name, err := pl.writeNode(node)
-			if err != nil {
-				return "_", err
+		name := "_"
+		if alias, ok := any.(uast.Alias); ok {
+			name, err = pl.writeAlias(alias)
+		} else {
+			if node, ok := any.(nodes.Node); ok {
+				name, err = pl.writeNode(node)
 			}
-			if name != "_" {
-				v := fmt.Sprintf("Node%d", len(vars))
-				vars = append(vars, v)
-				names = append(names, fmt.Sprintf("%s(%s)", name, v))
-			}
+		}
+
+		if err != nil {
+			return "_", err
+		}
+		if name != "_" {
+			v := fmt.Sprintf("Node%d", len(vars))
+			vars = append(vars, v)
+			names = append(names, fmt.Sprintf("%s(%s)", name, v))
 		}
 	}
 	format = strings.Replace(format, "Nodes", strings.Join(vars, ","), 1)
@@ -991,9 +997,12 @@ func (pl *uast2pl) writeInlineImport(i uast.InlineImport) (string, error) {
 func (pl *uast2pl) writeArgument(a uast.Argument) (string, error) {
 	format := "%s(['%s', Name, Type, Init, %s, %s, %s, Pos])"
 
-	name, err := pl.writeIdentifier(*a.Name)
-	if err != nil {
-		return "_", err
+	var err error
+	name := "_"
+	if a.Name != nil {
+		if name, err = pl.writeIdentifier(*a.Name); err != nil {
+			return "_", err
+		}
 	}
 	if name == "_" {
 		format = strings.Replace(format, "Name", "_", 1)
@@ -1064,7 +1073,8 @@ func (pl *uast2pl) writeArgument(a uast.Argument) (string, error) {
 	}
 
 	fn := fmt.Sprintf("argument%d", len(pl.arguments))
-	if _, err := fmt.Fprintf(pl.w, format+".\n", fn, uastArgument, a.Variadic, a.MapVariadic, a.Receiver); err != nil {
+	if _, err := fmt.Fprintf(pl.w, format+".\n", fn, uastArgument,
+		strconv.FormatBool(a.Variadic), strconv.FormatBool(a.MapVariadic), strconv.FormatBool(a.Receiver)); err != nil {
 		return "_", err
 	}
 
