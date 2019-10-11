@@ -14,11 +14,12 @@ def fib(n, a = 0, b = 1):
     return fib(n - 1, b, a + b);
 ```
 
-we get following
+we get following *UAST*
 <details>
-<summary>*UAST*</summary>
+<summary>UAST</summary>
 <p>
-```
+    
+```json
 { '@type': "python:Module",
    '@role': [File, Module],
    '@pos': { '@type': "uast:Positions",
@@ -622,14 +623,16 @@ we get following
    ],
 }
 ```
+
 </p>
 </details>
 
 
-what can be transformed into a prolog `./uast2pl -f fib.py -o fib.py.P`
+what can be transformed into a prolog: `./uast2pl -f fib.py -o fib.py.P`
 <details>
-<summary>program:</summary>
+<summary>prolog program</summary>
 <p>
+    
 ```prolog
 positions0(['uast:Positions', _, _]).
 value0('File').
@@ -923,12 +926,13 @@ function_type(X) :- function_type0(X).
 % function([Type, FuncType, Body, Pos]).
 function(X) :- function0(X).
 ```
+
 </p>
 </details>
 
 Next, we can query DB to get all identifiers and start positions:
-```
-./query -f /tmp/fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start
+```bash
+./query -f fib.py.P -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start
 
 Name = n
 Start = ['uast:Position',16,6,105]
