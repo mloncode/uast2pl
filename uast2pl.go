@@ -14,12 +14,34 @@ import (
 // WriteNode writes bblfsh Node as prolog terms and predicates.
 func WriteNode(w io.Writer, n nodes.Node) error {
 	pl := &uast2pl{
-		w:         w,
-		values:    make(map[string]string),
-		startEnds: make(map[uast.Position]string),
-		roles:     make(map[role.Role]string),
+		w:            w,
+		valuesMap:    make(map[string]int),
+		startEndsMap: make(map[uast.Position]int),
+		rolesMap:     make(map[role.Role]int),
 	}
 	_, err := pl.writeNode(n)
+
+	err = pl.writeDeclaration(err, "value", "Val", pl.values)
+	err = pl.writeDeclaration(err, "array", "[Arguments]", pl.arrays)
+	err = pl.writeDeclaration(err, "object", "Obj", pl.objects)
+	err = pl.writeDeclaration(err, "role", "Name", pl.roles)
+	err = pl.writeDeclaration(err, "position", "[Type, Col, Line, Offset]", pl.startEnds)
+	err = pl.writeDeclaration(err, "positions", "[Type, Start, End]", pl.positions)
+	err = pl.writeDeclaration(err, "identifier", "[Type, Name, Pos, [Roles]]", pl.identifiers)
+	err = pl.writeDeclaration(err, "qualified_identifier", "[Type, [Names], Pos]", pl.qualifiedIdentifiers)
+	err = pl.writeDeclaration(err, "comment", "[Type, Prefix, Suffix, Tab, Text, Block, Pos]", pl.comments)
+	err = pl.writeDeclaration(err, "group", "[Type, [Nodes], Pos]", pl.groups)
+	err = pl.writeDeclaration(err, "function_group", "[Type, [Nodes], Pos]", pl.functionGroups)
+	err = pl.writeDeclaration(err, "block", "[Type, [Statements], Pos]", pl.blocks)
+	err = pl.writeDeclaration(err, "alias", "[Type, Name, Node, Pos]", pl.aliases)
+	err = pl.writeDeclaration(err, "import", "[Type, Path, Pos]", pl.imports)
+	err = pl.writeDeclaration(err, "runtime_import", "[Type, Path, Pos]", pl.runtimeImports)
+	err = pl.writeDeclaration(err, "runtime_reimport", "[Type, Path, Pos]", pl.runtimeReImports)
+	err = pl.writeDeclaration(err, "inline_import", "[Type, Path, Pos]", pl.inlineImports)
+	err = pl.writeDeclaration(err, "argument", "[Type, Name, ArgType, Init, Variadic, MapVariadic, Receiver, Pos]", pl.arguments)
+	err = pl.writeDeclaration(err, "function_type", "[Type, [Arguments], [Returns], Pos]", pl.functionTypes)
+	err = pl.writeDeclaration(err, "function", "[Type, FuncType, Body, Pos]", pl.functions)
+
 	return err
 }
 
@@ -48,12 +70,15 @@ type uast2pl struct {
 	arrays  []string
 	objects []string
 
-	values               map[string]string
-	startEnds            map[uast.Position]string
+	valuesMap            map[string]int
+	values               []string
+	startEndsMap         map[uast.Position]int
+	startEnds            []string
 	positions            []string
 	identifiers          []string
 	qualifiedIdentifiers []string
-	roles                map[role.Role]string
+	rolesMap             map[role.Role]int
+	roles                []string
 	imports              []string
 	runtimeImports       []string
 	runtimeReImports     []string
@@ -85,9 +110,9 @@ func (pl *uast2pl) writeNode(n nodes.Node) (string, error) {
 
 func (pl *uast2pl) writeValue(val nodes.Value) (string, error) {
 	v := nodes.ToString(val)
-	fn, ok := pl.values[v]
+	i, ok := pl.valuesMap[v]
 	if ok {
-		return fn, nil
+		return pl.values[i], nil
 	}
 
 	quote := ""
@@ -95,12 +120,14 @@ func (pl *uast2pl) writeValue(val nodes.Value) (string, error) {
 		quote = "'"
 	}
 
-	fn = fmt.Sprintf("value%d", len(pl.values))
+	i = len(pl.values)
+	fn := fmt.Sprintf("value%d", i)
 	if _, err := fmt.Fprintf(pl.w, "%s(%s%s%s).\n", fn, quote, v, quote); err != nil {
 		return "_", err
 	}
 
-	pl.values[v] = fn
+	pl.values = append(pl.values, fn)
+	pl.valuesMap[v] = i
 	return fn, nil
 }
 
@@ -281,9 +308,9 @@ func (pl *uast2pl) writeObject(obj nodes.Object) (string, error) {
 // writePosition writes uast Position as prolog term:
 // position(['uast:Position', Col, Line, Offset]).
 func (pl *uast2pl) writePosition(p uast.Position) (string, error) {
-	fn, ok := pl.startEnds[p]
+	i, ok := pl.startEndsMap[p]
 	if ok {
-		return fn, nil
+		return pl.startEnds[i], nil
 	}
 
 	format := "%s(['%s', %s, %s, %s]).\n"
@@ -299,12 +326,14 @@ func (pl *uast2pl) writePosition(p uast.Position) (string, error) {
 		offset = fmt.Sprintf("%d", p.Offset)
 	}
 
-	fn = fmt.Sprintf("position%d", len(pl.startEnds))
+	i = len(pl.startEnds)
+	fn := fmt.Sprintf("position%d", i)
 	if _, err := fmt.Fprintf(pl.w, format, fn, uastPosition, col, line, offset); err != nil {
 		return "_", err
 	}
-	pl.startEnds[p] = fn
 
+	pl.startEnds = append(pl.startEnds, fn)
+	pl.startEndsMap[p] = i
 	return fn, nil
 }
 
@@ -369,17 +398,19 @@ func (pl *uast2pl) writePositions(p uast.Positions) (string, error) {
 // writeRole writes uast Role as prolog term:
 // role('Name').
 func (pl *uast2pl) writeRole(r role.Role) (string, error) {
-	fn, ok := pl.roles[r]
+	i, ok := pl.rolesMap[r]
 	if ok {
-		return fn, nil
+		return pl.roles[i], nil
 	}
 
-	fn = fmt.Sprintf("role%d", len(pl.roles))
+	i = len(pl.roles)
+	fn := fmt.Sprintf("role%d", i)
 	if _, err := fmt.Fprintf(pl.w, "%s('%s').\n", fn, r.String()); err != nil {
 		return "_", err
 	}
 
-	pl.roles[r] = fn
+	pl.roles = append(pl.roles, fn)
+	pl.rolesMap[r] = i
 	return fn, nil
 }
 
@@ -521,7 +552,7 @@ func (pl *uast2pl) writeComment(c uast.Comment) (string, error) {
 }
 
 // writeGroup writes  uast Group as prolog predicate:
-// group(['uast:Group', Node, Pos]) :- positions(Pos), predicate0(Node); predicate1(Node); ...predicateN(Node).
+// group(['uast:Group', [Node0, ..., NodeN], Pos]) :- positions(Pos), predicate0(Node0), ..., predicateN(NodeN).
 func (pl *uast2pl) writeGroup(g uast.Group) (string, error) {
 	format := "%s(['%s', [Nodes], Pos])"
 
@@ -579,7 +610,7 @@ func (pl *uast2pl) writeGroup(g uast.Group) (string, error) {
 }
 
 // writeFunctionGroup writes  uast FunctionGroup as prolog predicate:
-// function_group(['uast:FunctionGroup', Node, Pos]) :- positions(Pos), predicate0(Node); predicate1(Node); ...predicateN(Node).
+// function_group(['uast:FunctionGroup', [Node0, ..., NodeN], Pos]) :- positions(Pos), predicate0(Node0), ..., predicateN(NodeN).
 func (pl *uast2pl) writeFunctionGroup(g uast.FunctionGroup) (string, error) {
 	format := "%s(['%s', [Nodes], Pos])"
 
@@ -637,7 +668,7 @@ func (pl *uast2pl) writeFunctionGroup(g uast.FunctionGroup) (string, error) {
 }
 
 // writeBlock writes  uast Block as prolog predicate:
-// block(['uast:Block', Stmt, Pos]) :- positions(Pos), statement0(Stmt); ...statementN(Stmt)
+// block(['uast:Block', [Stmt0, ..., StmtN], Pos]) :- positions(Pos), statement0(Stmt0), ..., statementN(StmtN)
 func (pl *uast2pl) writeBlock(b uast.Block) (string, error) {
 	format := "%s(['%s', [Stmts], Pos])"
 
@@ -695,7 +726,7 @@ func (pl *uast2pl) writeBlock(b uast.Block) (string, error) {
 }
 
 // writeAlias writes  uast Alias as prolog predicate:
-// alias(['uast:Alias', Name, Pos]) :- identifier(Name), positions(Pos).
+// alias(['uast:Alias', Name, Node, Pos]) :- identifier(Name), positions(Pos).
 func (pl *uast2pl) writeAlias(a uast.Alias) (string, error) {
 	format := "%s(['%s', Name, Node, Pos])"
 
@@ -1190,27 +1221,21 @@ func (pl *uast2pl) writeFunction(f uast.Function) (string, error) {
 	return fn, nil
 }
 
-func (pl *uast2pl) writeFunctionTypePredicate() error {
-	fn := "function_type([Type, [Argument], [Return], Pos])"
-	if len(pl.functionTypes) > 0 {
-		fn += " :- " + joinFunc(pl.functionTypes, ";", func(f string) string {
-			return fmt.Sprintf("%s([Type, [Argument], [Return], Pos])", f)
-		})
+func (pl *uast2pl) writeDeclaration(err error, fn string, arg string, preds []string) error {
+	if err != nil {
+		return err
 	}
 
-	_, err := fmt.Fprintln(pl.w, fn+".")
-	return err
-}
+	if len(preds) > 0 {
 
-func (pl *uast2pl) writeFunctionPredicate() error {
-	fn := "function([Type, FuncType, Body, Pos])"
-	if len(pl.functions) > 0 {
-		fn += " :- " + joinFunc(pl.functions, ";", func(f string) string {
-			return fmt.Sprintf("%s([Type, FuncType, Body, Pos])", f)
-		})
+		format := "%% %s(%s).\n%s(X)"
+		body := joinFunc(preds, ";", func(term string) string { return fmt.Sprintf("%s(X)", term) })
+		if body != "" {
+			format += " :- " + body
+		}
+
+		_, err = fmt.Fprintf(pl.w, "\n"+format+".\n", fn, arg, fn)
 	}
-
-	_, err := fmt.Fprintln(pl.w, fn+".")
 	return err
 }
 

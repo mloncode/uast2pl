@@ -73,17 +73,23 @@ import0(['uast:Import', Path, Pos]) :- qualified_identifier0(Path),positions2(Po
 
 Next, we can query DB:
 ```prolog
-% get paths, columns and line number for the first import(['uast:Import', Path, Pos]).
+% get paths, columns and line number for the all imports:
 
-?- import0([_, [_, [[_, Path1, [_, [_, Col1, Line1, _], _], _], [_, Path2, [_, [_, Col2, Line2, _], _], _]], _], _]).
+?- import([_, [_, [[_, Path1, [_, [_, Col1, Line1, _], _], _], [_, Path2, [_, [_, Col2, Line2, _], _], _]], _], _]).
 
-% Path1 = java,
-% Col1 = 8,
+%Path1 = java,
+%Col1 = 8,
+%Line1 = Line2, Line2 = 2,
+%Path2 = io,
+%Col2 = 13 ;
 
-% Line1 = Line2, Line2 = 2,
+%Path1 = javax,
+%Col1 = 8,
+%Line1 = Line2, Line2 = 3,
+%Path2 = servlet,
+%Col2 = 14.
 
-% Path2 = io,
-% Col2 = 13.
+
 ```
 
 _Happy hacking!_
