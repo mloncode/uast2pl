@@ -3,7 +3,8 @@ This is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-s
 It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
 ### Tools
-- `./cmd/uast2pl`: transforms _uast_ into a prolog program.
+- `./cmd/uast2pl -f fib.py -o fib.py.pl`.
+Transforms _uast_ into a prolog program.
 ```bash
 Usage of ./uast2pl:
   -f string
@@ -14,7 +15,8 @@ Usage of ./uast2pl:
     	address:port of babelfish server (default "localhost:9432")
 ```
 
-- `./cmd/query`: embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
+- `./cmd/query -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start`.
+Embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
 ```bash
 Usage of ./query:
   -f value
@@ -28,7 +30,7 @@ Usage of ./query:
 ```
 
 ### Example
-For a given fib.py file:
+For a given `fib.py` file:
 ```python
 def fib(n, a = 0, b = 1):
     if n == 0:
@@ -38,9 +40,8 @@ def fib(n, a = 0, b = 1):
     return fib(n - 1, b, a + b);
 ```
 
-we get following *UAST*:
 <details>
-<summary>UAST</summary>
+<summary>we get following UAST</summary>
 <p>
     
 ```
@@ -651,10 +652,8 @@ we get following *UAST*:
 </p>
 </details>
 
-
-what can be transformed into a prolog: `./uast2pl -f fib.py -o fib.py.P`
 <details>
-<summary>prolog program</summary>
+<summary>what can be transformed into a prolog program</summary>
 <p>
     
 ```prolog
@@ -954,9 +953,9 @@ function(X) :- function0(X).
 </p>
 </details>
 
-Next, we can query DB to get all identifiers and start positions:
+Next, we can query DB to get all identifiers and start positions (we can also use any other prolog implementation, e.g. [swi-prolog](https://www.swi-prolog.org)):
 ```bash
-./query -f fib.py.P -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start
+./query -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start
 
 Name = n
 Start = ['uast:Position',16,6,105]
