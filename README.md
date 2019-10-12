@@ -3,7 +3,7 @@ This is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-s
 It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
 ### Tools
-- ./cmd/uast2pl: transforms _uast_ into a prolog program.
+- `./cmd/uast2pl`: transforms _uast_ into a prolog program.
 ```bash
 Usage of ./uast2pl:
   -f string
@@ -14,7 +14,7 @@ Usage of ./uast2pl:
     	address:port of babelfish server (default "localhost:9432")
 ```
 
-- ./cmd/query: embedded _wam_ lets query prolog DB.
+- `./cmd/query`: embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
 ```bash
 Usage of ./query:
   -f value
