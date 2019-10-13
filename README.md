@@ -1,7 +1,6 @@
 # uast2pl
- This is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-specification-v2.html) to Prolog transpiler.
- <img src="logo.png" name="logo" />
- 
+ <img src="logo.png" name="logo" /> This is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-specification-v2.html) to Prolog transpiler.
+
 It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
 ### Tools
@@ -45,7 +44,7 @@ def fib(n, a = 0, b = 1):
 <details>
 <summary>we get following UAST</summary>
 <p>
-    
+
 ```
 { '@type': "python:Module",
    '@role': [File, Module],
@@ -657,7 +656,7 @@ def fib(n, a = 0, b = 1):
 <details>
 <summary>what can be transformed into a prolog program</summary>
 <p>
-    
+
 ```prolog
 positions0(['uast:Positions', _, _]).
 value0('File').
