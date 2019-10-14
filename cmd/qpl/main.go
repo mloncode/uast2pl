@@ -53,11 +53,32 @@ func main() {
 		}
 	}
 
+	wam, err := consult(files)
+	if err != nil {
+		panic(err)
+	}
+
+	vars, err := variables(query)
+	if err != nil {
+		panic(err)
+	}
+
+	err = proveAll(wam, query, vars, func(v string, t term.Term) {
+		io.WriteString(w, fmt.Sprintf("%s = %s\n", v, t))
+	})
+	if err != nil {
+		panic(err)
+	}
+	io.WriteString(w, "\n")
+}
+
+func consult(src []string) (prolog.Machine, error) {
 	wam := prolog.NewMachine()
-	for _, name := range files {
+
+	for _, name := range src {
 		f, err := os.Open(name)
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 
 		wam = wam.Consult(f)
@@ -66,26 +87,7 @@ func main() {
 			log.Println(err)
 		}
 	}
-
-	vars, err := variables(query)
-	if err != nil {
-		panic(err)
-	}
-	for _, s := range wam.ProveAll(query) {
-		for _, v := range vars {
-			if v == "_" {
-				continue
-			}
-
-			t, err := s.ByName(v)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			io.WriteString(w, fmt.Sprintf("%s = %s\n", v, t))
-		}
-		io.WriteString(w, "\n")
-	}
+	return wam, nil
 }
 
 func variables(src string) ([]string, error) {
@@ -109,4 +111,21 @@ func variables(src string) ([]string, error) {
 		}
 	}
 	return vars, nil
+}
+
+func proveAll(wam prolog.Machine, q string, vars []string, call func(v string, t term.Term)) error {
+	for _, s := range wam.ProveAll(q) {
+		for _, v := range vars {
+			if v == "_" {
+				continue
+			}
+
+			t, err := s.ByName(v)
+			if err != nil {
+				return err
+			}
+			call(v, t)
+		}
+	}
+	return nil
 }
