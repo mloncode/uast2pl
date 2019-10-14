@@ -1,8 +1,9 @@
  <img src="logo.png" name="logo" width="200" /> 
  
----
 
-**uast2pl** is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-specification-v2.html) to Prolog transpiler.
+
+# uast2pl
+is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-specification-v2.html) to Prolog transpiler.
 
 It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
