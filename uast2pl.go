@@ -1235,17 +1235,18 @@ func (pl *uast2pl) writeDeclaration(err error, fn string, arg string, preds []st
 	if err != nil {
 		return err
 	}
-
-	if len(preds) > 0 {
-
-		format := "%% %s(%s).\n%s(X)"
+	format := "%% %s(%s).\n%s(X)"
+	if len(preds) == 0 {
+		format = strings.Replace(format, "X", "_", 1)
+		format += " :- fail"
+	} else {
 		body := joinFunc(preds, ";", func(term string) string { return fmt.Sprintf("%s(X)", term) })
 		if body != "" {
 			format += " :- " + body
 		}
-
-		_, err = fmt.Fprintf(pl.w, "\n"+format+".\n", fn, arg, fn)
 	}
+
+	_, err = fmt.Fprintf(pl.w, "\n"+format+".\n", fn, arg, fn)
 	return err
 }
 
