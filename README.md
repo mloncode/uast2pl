@@ -2317,10 +2317,13 @@ function(X) :- function0(X).
 </p>
 </details>
 
-Next, we can try to extract not complex import tuples, but just import paths.
-So, we'll need to posprocess imports. A `import.pl` file contains a few prolog _helpers_ to let get all imports,
-extract identifier names, and join them together.
-We can load `import.pl` module and use `import_path` predicate:
+If we want to extract just import paths, we'll need to postprocess _import_ solutions.
+
+Because it's easier to do it in prolog, we can also load some extra prolog modules.
+
+A `import.pl` file contains a few prolog _helpers_ which let you extract identifier names from imports and join them together.
+
+We can load `import.pl` module and use `import_path/1` predicate:
 
 ```bash
 ./qpl -f hello.java.pl -f import.pl -q "import_path(Path)." -v Path
