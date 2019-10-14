@@ -16,10 +16,10 @@ Usage of ./uast2pl:
     	address:port of babelfish server (default "localhost:9432")
 ```
 
-- `./cmd/query -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start`.
+- `./cmd/qpl -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start`.
 Embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
 ```bash
-Usage of ./query:
+Usage of ./qpl:
   -f value
     	list of input prolog files
   -o string
@@ -977,7 +977,7 @@ function(X) :- function0(X).
 
 Next, we can query DB to get all identifiers and start positions (we can also use any other prolog implementation, e.g. [swi-prolog](https://www.swi-prolog.org)):
 ```bash
-./query -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start
+./qpl -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start
 
 Name = n
 Start = ['uast:Position',16,6,105]
@@ -2323,7 +2323,7 @@ extract identifier names, and join them together.
 We can load `import.pl` module and use `import_path` predicate:
 
 ```bash
-./query -f hello.java.pl -f import.pl -q "import_path(Path)." -v Path
+./qpl -f hello.java.pl -f import.pl -q "import_path(Path)." -v Path
 
 Path = [java,io]
 
