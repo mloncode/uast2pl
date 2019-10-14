@@ -17,6 +17,7 @@ Usage of ./uast2pl:
 ```
 
 - `./cmd/query -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])." -v Name -v Start`.
+
 Embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
 ```bash
 Usage of ./query:
