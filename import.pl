@@ -13,4 +13,7 @@ extract_name(_, []) :- !.
 
 % import_path extracts 'Name' tokens for each import.
 % It returns a Path as list of names.
-import_path(Path) :- !, import(Import), extract_name(Import, Path).
+import_path(Path) :- import(Import), extract_name(Import, Path).
+import_path(Path) :- runtime_import(Import), extract_name(Import, Path).
+import_path(Path) :- runtime_reimport(Import), extract_name(Import, Path).
+import_path(Path) :- inline_import(Import), extract_name(Import, Path).
