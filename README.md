@@ -2319,7 +2319,8 @@ function(X) :- function0(X).
 </details>
 
 If we want to extract just import paths, we'll need to postprocess _import_ solutions. 
-It's easier to do it in prolog. Apart from the generated `hello.java.pl` file we can also load some extra modules.
+
+Because it's easier to do it in prolog, we can also load some extra prolog modules.
 
 A `import.pl` file contains a few prolog _helpers_ which let you extract identifier names from imports and join them together.
 
