@@ -4,11 +4,10 @@ join_([Head | Tail], List, [Head | NewList]) :- !, join_(Tail, List, NewList).
 
 % extract_name_ is a private predicate - modified version of flatten/2 (from list module).
 % It just extracts 'Name' from identifier tuple.
-extract_name_([], []) :- !.
-extract_name_([['uast:Identifier',Name, _, ['Identifier']] | TailList], [Name | List]) :- !, extract_name_(TailList, List).
-extract_name_([Head | Tail], List) :- !, extract_name_(Head, HeadList), extract_name_(Tail, TailList),  join_(HeadList, TailList, List).
-extract_name_(['uast:Identifier',Name,_,['Identifier']], [Name]) :- !.
-extract_name_(_, []) :- !.
+extract_name_([], []).
+extract_name_([['uast:Identifier', Name, _, ['Identifier']] | TailList], [Name | List]) :- \+ var(Name), extract_name_(TailList, List), !.
+extract_name_([Head | Tail], List) :- extract_name_(Head, HeadList), extract_name_(Tail, TailList), join_(HeadList, TailList, List), !.
+extract_name_(_, []).
 
 
 % import_path extracts 'Name' tokens for each import.
