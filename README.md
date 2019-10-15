@@ -1,5 +1,5 @@
- <img src="logo.png" name="logo" width="200" /> 
- 
+ <img src="logo.png" name="logo" width="200" />
+
 
 
 # uast2pl
@@ -10,10 +10,10 @@ It takes *UAST* node as an input and tries to produce equivalent prolog program.
 ### Tools
 - `./cmd/uast2pl -f fib.py -o fib.py.pl`.
 Transforms source code into _uast_ (thanks to babelfish) and next transforms _uast_ into a prolog representation.
-```bash
+```
 Usage of ./uast2pl:
-  -f string
-    	input file to parse
+  -f value
+    	list of input source files
   -o string
     	output file (by default stdio)
   -s string
@@ -22,14 +22,14 @@ Usage of ./uast2pl:
 
 - `./cmd/qpl -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])."`.
 Embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
-```bash
+```
 Usage of ./qpl:
   -f value
     	list of input prolog files
-  -o string
-    	output file (by default stdio)
   -q string
     	prolog query
+  -o string
+    	output file (by default stdio)
 ```
 
 ### Example (extract identifiers)

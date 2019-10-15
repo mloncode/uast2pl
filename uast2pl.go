@@ -11,15 +11,20 @@ import (
 	"github.com/bblfsh/sdk/v3/uast/role"
 )
 
-// WriteNode writes bblfsh Node as prolog terms and predicates.
-func WriteNode(w io.Writer, n nodes.Node) error {
+// WriteNode writes bblfsh node(s) as prolog terms and predicates.
+func WriteNode(w io.Writer, n ...nodes.Node) (err error) {
 	pl := &uast2pl{
 		w:            w,
 		valuesMap:    make(map[string]int),
 		startEndsMap: make(map[uast.Position]int),
 		rolesMap:     make(map[role.Role]int),
 	}
-	_, err := pl.writeNode(n)
+
+	for _, ni := range n {
+		if _, err = pl.writeNode(ni); err != nil {
+			return err
+		}
+	}
 
 	err = pl.writeDeclaration(err, "value", "Val", pl.values)
 	err = pl.writeDeclaration(err, "array", "[Arguments]", pl.arrays)
@@ -118,6 +123,7 @@ func (pl *uast2pl) writeValue(val nodes.Value) (string, error) {
 	quote := ""
 	if val.Kind() == nodes.KindString {
 		quote = "'"
+		v = strings.TrimSpace(v)
 	}
 
 	i = len(pl.values)

@@ -1,4 +1,4 @@
-% join is a private predicate - the same predicate as stdlib's append/3 or merge/3 (from list module).
+% join_ is a private predicate - the same predicate as stdlib's append/3 or merge/3 (from list module).
 join_([], List, List).
 join_([Head | Tail], List, [Head | NewList]) :- !, join_(Tail, List, NewList).
 

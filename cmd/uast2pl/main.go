@@ -5,26 +5,39 @@ import (
 	"flag"
 	"io"
 	"os"
+	"strings"
 
 	bblfsh "github.com/bblfsh/go-client/v4"
+
 	"github.com/mloncode/uast2pl"
 )
 
+type stringList []string
+
+func (l *stringList) String() string {
+	return strings.Join(*l, ",")
+}
+
+func (l *stringList) Set(value string) error {
+	*l = append(*l, value)
+	return nil
+}
+
 var (
-	input  string
+	files  stringList
 	host   string
 	output string
 )
 
 func init() {
-	flag.StringVar(&input, "f", "", "input file to parse")
+	flag.Var(&files, "f", "list of input source files")
 	flag.StringVar(&host, "s", "localhost:9432", "address:port of babelfish server")
 	flag.StringVar(&output, "o", "", "output file (by default stdio)")
 }
 
 func main() {
 	flag.Parse()
-	if input == "" {
+	if len(files) == 0 {
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -35,11 +48,15 @@ func main() {
 	}
 	defer client.Close()
 
+	nodes := make([]bblfsh.Node, len(files))
 	req := client.NewParseRequest()
-	req = req.ReadFile(input)
-	n, _, err := req.UAST()
-	if err != nil {
-		panic(err)
+	for i, f := range files {
+		req = req.ReadFile(f)
+		n, _, err := req.UAST()
+		if err != nil {
+			panic(err)
+		}
+		nodes[i] = n
 	}
 
 	var w io.Writer = os.Stdout
@@ -52,7 +69,7 @@ func main() {
 		}
 	}
 
-	if err = uast2pl.WriteNode(w, n); err != nil {
+	if err = uast2pl.WriteNode(w, nodes...); err != nil {
 		panic(err)
 	}
 }
