@@ -5,6 +5,8 @@
 # uast2pl
 is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-specification-v2.html) to Prolog transpiler.
 
+<img src="workflow.png" name="workflow" />
+
 It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
 ### Tools
