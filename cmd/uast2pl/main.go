@@ -49,8 +49,8 @@ func main() {
 	defer client.Close()
 
 	nodes := make([]bblfsh.Node, len(files))
-	req := client.NewParseRequest()
 	for i, f := range files {
+		req := client.NewParseRequest()
 		req = req.ReadFile(f)
 		n, _, err := req.UAST()
 		if err != nil {
