@@ -110,6 +110,7 @@ func (pl *uast2pl) writeNode(n nodes.Node) (string, error) {
 	case nodes.Object:
 		return pl.writeObject(n)
 	}
+
 	return "_", nil
 }
 
@@ -577,16 +578,19 @@ func (pl *uast2pl) writeGroup(g uast.Group) (string, error) {
 		vars  []string
 	)
 	for _, any := range g.Nodes {
-		if node, ok := any.(nodes.Node); ok {
-			name, err := pl.writeNode(node)
-			if err != nil {
-				return "_", err
-			}
-			if name != "_" {
-				v := fmt.Sprintf("Node%d", len(vars))
-				vars = append(vars, v)
-				names = append(names, fmt.Sprintf("%s(%s)", name, v))
-			}
+		node, err := uast.ToNode(any)
+		if err != nil {
+			return "_", err
+		}
+
+		name, err := pl.writeNode(node)
+		if err != nil {
+			return "_", err
+		}
+		if name != "_" {
+			v := fmt.Sprintf("Node%d", len(vars))
+			vars = append(vars, v)
+			names = append(names, fmt.Sprintf("%s(%s)", name, v))
 		}
 	}
 	format = strings.Replace(format, "Nodes", strings.Join(vars, ","), 1)
@@ -635,15 +639,12 @@ func (pl *uast2pl) writeFunctionGroup(g uast.FunctionGroup) (string, error) {
 		vars  []string
 	)
 	for _, any := range g.Nodes {
-		name := "_"
-		if alias, ok := any.(uast.Alias); ok {
-			name, err = pl.writeAlias(alias)
-		} else {
-			if node, ok := any.(nodes.Node); ok {
-				name, err = pl.writeNode(node)
-			}
+		node, err := uast.ToNode(any)
+		if err != nil {
+			return "_", err
 		}
 
+		name, err := pl.writeNode(node)
 		if err != nil {
 			return "_", err
 		}
@@ -699,16 +700,19 @@ func (pl *uast2pl) writeBlock(b uast.Block) (string, error) {
 		vars  []string
 	)
 	for _, any := range b.Statements {
-		if node, ok := any.(nodes.Node); ok {
-			s, err := pl.writeNode(node)
-			if err != nil {
-				return "_", err
-			}
-			if s != "_" {
-				v := fmt.Sprintf("Stmt%d", len(vars))
-				vars = append(vars, v)
-				stmts = append(stmts, fmt.Sprintf("%s(%s)", s, v))
-			}
+		node, err := uast.ToNode(any)
+		if err != nil {
+			return "_", err
+		}
+
+		s, err := pl.writeNode(node)
+		if err != nil {
+			return "_", err
+		}
+		if s != "_" {
+			v := fmt.Sprintf("Stmt%d", len(vars))
+			vars = append(vars, v)
+			stmts = append(stmts, fmt.Sprintf("%s(%s)", s, v))
 		}
 	}
 	format = strings.Replace(format, "Stmts", strings.Join(vars, ","), 1)
@@ -752,11 +756,14 @@ func (pl *uast2pl) writeAlias(a uast.Alias) (string, error) {
 		pos = fmt.Sprintf("%s(Pos)", pos)
 	}
 
-	node := "_"
-	if n, ok := a.Node.(nodes.Node); ok {
-		if node, err = pl.writeNode(n); err != nil {
-			return "_", err
-		}
+	n, err := uast.ToNode(a.Node)
+	if err != nil {
+		return "_", err
+	}
+
+	node, err := pl.writeNode(n)
+	if err != nil {
+		return "_", err
 	}
 	if node == "_" {
 		format = strings.Replace(format, "Node", "_", 1)
@@ -821,9 +828,14 @@ func (pl *uast2pl) writeImport(i uast.Import) (string, error) {
 		pos = fmt.Sprintf("%s(Pos)", pos)
 	}
 
-	path := "_"
-	if node, ok := i.Path.(nodes.Node); ok {
-		path, err = pl.writeNode(node)
+	node, err := uast.ToNode(i.Path)
+	if err != nil {
+		return "_", err
+	}
+
+	path, err := pl.writeNode(node)
+	if err != nil {
+		return "_", err
 	}
 	if path == "_" {
 		format = strings.Replace(format, "Path", "_", 1)
@@ -869,9 +881,14 @@ func (pl *uast2pl) writeRuntimeImport(i uast.RuntimeImport) (string, error) {
 		pos = fmt.Sprintf("%s(Pos)", pos)
 	}
 
-	path := "_"
-	if node, ok := i.Path.(nodes.Node); ok {
-		path, err = pl.writeNode(node)
+	node, err := uast.ToNode(i.Path)
+	if err != nil {
+		return "_", err
+	}
+
+	path, err := pl.writeNode(node)
+	if err != nil {
+		return "_", err
 	}
 	if path == "_" {
 		format = strings.Replace(format, "Path", "_", 1)
@@ -917,9 +934,14 @@ func (pl *uast2pl) writeRuntimeReImport(i uast.RuntimeReImport) (string, error) 
 		pos = fmt.Sprintf("%s(Pos)", pos)
 	}
 
-	path := "_"
-	if node, ok := i.Path.(nodes.Node); ok {
-		path, err = pl.writeNode(node)
+	node, err := uast.ToNode(i.Path)
+	if err != nil {
+		return "_", err
+	}
+
+	path, err := pl.writeNode(node)
+	if err != nil {
+		return "_", err
 	}
 	if path == "_" {
 		format = strings.Replace(format, "Path", "_", 1)
@@ -965,9 +987,14 @@ func (pl *uast2pl) writeInlineImport(i uast.InlineImport) (string, error) {
 		pos = fmt.Sprintf("%s(Pos)", pos)
 	}
 
-	path := "_"
-	if node, ok := i.Path.(nodes.Node); ok {
-		path, err = pl.writeNode(node)
+	node, err := uast.ToNode(i.Path)
+	if err != nil {
+		return "_", err
+	}
+
+	path, err := pl.writeNode(node)
+	if err != nil {
+		return "_", err
 	}
 	if path == "_" {
 		format = strings.Replace(format, "Path", "_", 1)
@@ -1016,11 +1043,14 @@ func (pl *uast2pl) writeArgument(a uast.Argument) (string, error) {
 		name = fmt.Sprintf("%s(Name)", name)
 	}
 
-	typ := "_"
-	if node, ok := a.Type.(nodes.Node); ok {
-		if typ, err = pl.writeNode(node); err != nil {
-			return "_", err
-		}
+	node, err := uast.ToNode(a.Type)
+	if err != nil {
+		return "_", err
+	}
+
+	typ, err := pl.writeNode(node)
+	if err != nil {
+		return "_", err
 	}
 	if typ == "_" {
 		format = strings.Replace(format, "Type", "_", 1)
@@ -1028,11 +1058,14 @@ func (pl *uast2pl) writeArgument(a uast.Argument) (string, error) {
 		typ = fmt.Sprintf("%s(Type)", typ)
 	}
 
-	init := "_"
-	if node, ok := a.Init.(nodes.Node); ok {
-		if init, err = pl.writeNode(node); err != nil {
-			return "_", err
-		}
+	node, err = uast.ToNode(a.Init)
+	if err != nil {
+		return "_", err
+	}
+
+	init, err := pl.writeNode(node)
+	if err != nil {
+		return "_", err
 	}
 	if init == "_" {
 		format = strings.Replace(format, "Init", "_", 1)

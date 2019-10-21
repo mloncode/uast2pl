@@ -9,7 +9,7 @@ import (
 
 	bblfsh "github.com/bblfsh/go-client/v4"
 
-	"github.com/mloncode/uast2pl"
+	"github.com/mloncode/uast2pl/pkg/uast2pl"
 )
 
 type stringList []string
