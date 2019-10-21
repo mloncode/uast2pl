@@ -10,9 +10,12 @@ is kind of [Universal Abstract Syntax Tree](https://doc.bblf.sh/uast/uast-specif
 It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
 ### Tools
-- `./cmd/uast2pl -f fib.py -o fib.py.pl`.
+- `./uast2pl -f input-source.file [-f input-source.file2 -f ...] [-o output-prolog.file] [-s babelfish-server]`.
 Transforms source code into _uast_ (thanks to babelfish) and next transforms _uast_ into a prolog representation.
 ```
+go build ./cmd/uast2pl
+
+./uast2pl --help
 Usage of ./uast2pl:
   -f value
     	list of input source files
@@ -22,9 +25,12 @@ Usage of ./uast2pl:
     	address:port of babelfish server (default "localhost:9432")
 ```
 
-- `./cmd/qpl -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])."`.
+- `./qpl -f input-prolog.file [-f input-prolog.file2 -f ...] [-o output.file]  -q "query(Var)."`.
 Embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
 ```
+go build ./cmd/qpl/
+
+./qpl --help
 Usage of ./qpl:
   -f value
     	list of input prolog files
@@ -35,7 +41,7 @@ Usage of ./qpl:
 ```
 
 ### Example (extract identifiers)
-For a given `fib.py` file:
+For a given `examples/python/fib.py` file:
 ```python
 def fib(n, a = 0, b = 1):
     if n == 0:
@@ -1002,7 +1008,7 @@ Start = ['uast:Position',12,6,101]
 
 
 ### Example (extract import paths)
-For a given `hello.java` file:
+For a given `examples/java/hello.java` file:
 ```java
 // hello.java
 import java.io.*;
@@ -2325,12 +2331,12 @@ If we want to extract just import paths, we'll need to postprocess _import_ solu
 
 Because it's easier to do it in prolog, we can also load some extra prolog modules.
 
-A `import.pl` file contains a few prolog _helpers_ which let you extract identifier names from imports and join them together.
+A `prolog/import.pl` file contains a few prolog _helpers_ which let you extract identifier names from imports and join them together.
 
-We can load `import.pl` module and use `import_path/1` predicate:
+We can load `prolog/import.pl` module and use `import_path/1` predicate:
 
 ```bash
-./qpl -f hello.java.pl -f import.pl -q "import_path(Path)."
+./qpl -f ./examples/java/hello.java.pl -f ./prolog/import.pl -q "import_path(Path)."
 
 Path = [java,io]
 
