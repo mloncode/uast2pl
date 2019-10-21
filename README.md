@@ -11,6 +11,7 @@ It takes *UAST* node as an input and tries to produce equivalent prolog program.
 
 ### Tools
 - `./uast2pl -f input-source.file [-f input-source.file2 -f ...] [-o output-prolog.file] [-s babelfish-server]`.
+
 Transforms source code into _uast_ (thanks to babelfish) and next transforms _uast_ into a prolog representation.
 ```
 go build ./cmd/uast2pl
@@ -26,6 +27,7 @@ Usage of ./uast2pl:
 ```
 
 - `./qpl -f input-prolog.file [-f input-prolog.file2 -f ...] [-o output.file]  -q "query(Var)."`.
+
 Embedded [_wam_](https://en.wikipedia.org/wiki/Warren_Abstract_Machine) lets query prolog DB.
 ```
 go build ./cmd/qpl/
