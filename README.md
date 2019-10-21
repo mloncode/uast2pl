@@ -42,7 +42,7 @@ Usage of ./qpl:
     	output file (by default stdio)
 ```
 
-### Example (extract identifiers)
+### Example (extract function name and arguments)
 For a given `examples/python/fib.py` file:
 ```python
 def fib(n, a = 0, b = 1):
