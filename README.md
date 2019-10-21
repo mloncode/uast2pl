@@ -987,25 +987,12 @@ function(X) :- function0(X).
 </p>
 </details>
 
-Next, we can query DB to get all identifiers and start positions (we can also use any other prolog implementation, e.g. [swi-prolog](https://www.swi-prolog.org)):
+Next, we can query DB to get all function names and arguments (we can also use any other prolog implementation, e.g. [swi-prolog](https://www.swi-prolog.org)):
 ```bash
-./qpl -f fib.py.pl -q "identifier([_, Name, [_, Start, _], _])."
+ ./qpl -f ./examples/python/fib.py.pl -f ./prolog/function.pl -q "function_arg(Fn, Args)."
 
-Name = n
-Start = ['uast:Position',16,6,105]
-
-Name = b
-Start = ['uast:Position',23,6,112]
-
-Name = a
-Start = ['uast:Position',26,6,115]
-
-Name = b
-Start = ['uast:Position',30,6,119]
-
-Name = fib
-Start = ['uast:Position',12,6,101]
-...
+Fn = fib
+Args = [n,a,b]
 ```
 
 
