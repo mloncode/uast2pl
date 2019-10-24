@@ -681,7 +681,9 @@ positions1(['uast:Positions', Start, End]) :- position0(Start), position1(End).
 array1([]).
 value3(false).
 object0(_).
-object1(Obj) :- !,array1(Obj);value3(Obj);object0(Obj).
+object1(Obj) :- value3(Obj), !.
+object1(Obj) :- object0(Obj), !.
+object1(Obj) :- array1(Obj), !.
 positions2(['uast:Positions', _, _]).
 positions3(['uast:Positions', _, _]).
 position2(['uast:Position', 9, 1, 8]).
@@ -695,6 +697,9 @@ position4(['uast:Position', 12, 1, 11]).
 position5(['uast:Position', 13, 1, 12]).
 positions6(['uast:Positions', Start, End]) :- position4(Start), position5(End).
 identifier1(['uast:Identifier', 'a', Pos, [Role0]]) :- positions6(Pos),role0(Role0).
+position6(['uast:Position', 16, 1, 15]).
+position7(['uast:Position', 17, 1, 16]).
+positions7(['uast:Positions', Start, End]) :- position6(Start), position7(End).
 value4('Expression').
 value5('Literal').
 value6('Number').
@@ -702,22 +707,25 @@ value7('Primitive').
 array2([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3).
 value8('python:Num').
 value9(0).
-position6(['uast:Position', 16, 1, 15]).
-position7(['uast:Position', 17, 1, 16]).
-positions7(['uast:Positions', Start, End]) :- position6(Start), position7(End).
-object2(Obj) :- !,array2(Obj);value8(Obj);value9(Obj);positions7(Obj).
+object2(Obj) :- positions7(Obj), !.
+object2(Obj) :- array2(Obj), !.
+object2(Obj) :- value8(Obj), !.
+object2(Obj) :- value9(Obj), !.
 positions8(['uast:Positions', Start, End]) :- position4(Start), position5(End).
 argument1(['uast:Argument', Name, _, Init, false, false, false, Pos]) :- identifier1(Name),object2(Init),positions8(Pos).
 position8(['uast:Position', 19, 1, 18]).
 position9(['uast:Position', 20, 1, 19]).
 positions9(['uast:Positions', Start, End]) :- position8(Start), position9(End).
 identifier2(['uast:Identifier', 'b', Pos, [Role0]]) :- positions9(Pos),role0(Role0).
+value10(1).
 position10(['uast:Position', 23, 1, 22]).
 position11(['uast:Position', 24, 1, 23]).
 positions10(['uast:Positions', Start, End]) :- position10(Start), position11(End).
 array3([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3).
-value10(1).
-object3(Obj) :- !,positions10(Obj);array3(Obj);value8(Obj);value10(Obj).
+object3(Obj) :- value8(Obj), !.
+object3(Obj) :- value10(Obj), !.
+object3(Obj) :- positions10(Obj), !.
+object3(Obj) :- array3(Obj), !.
 positions11(['uast:Positions', Start, End]) :- position8(Start), position9(End).
 argument2(['uast:Argument', Name, _, Init, false, false, false, Pos]) :- identifier2(Name),object3(Init),positions11(Pos).
 positions12(['uast:Positions', _, _]).
@@ -726,193 +734,306 @@ positions13(['uast:Positions', _, _]).
 argument3(['uast:Argument', _, _, Init, false, false, false, Pos]) :- identifier3(Init),positions13(Pos).
 function_type0(['uast:FunctionType', [Arg0,Arg1,Arg2], [Ret0], Pos]) :- argument0(Arg0),argument1(Arg1),argument2(Arg2),argument3(Ret0),positions3(Pos).
 positions14(['uast:Positions', _, _]).
-value11('python:If.orelse').
-value12('else').
-array4([]).
-value13('If').
-value14('Body').
-value15('Else').
-array5([Arg0,Arg1,Arg2]) :- value13(Arg0),value14(Arg1),value15(Arg2).
-object4(Obj) :- !,value11(Obj);value12(Obj);array4(Obj);array5(Obj).
-value16('python:Compare').
-value17('Right').
-array6([Arg0,Arg1]) :- value4(Arg0),value17(Arg1).
-value18('python:Compare.comparators').
-position12(['uast:Position', 13, 2, 38]).
-position13(['uast:Position', 14, 2, 39]).
+value11('If').
+array4([Arg0,Arg1]) :- value11(Arg0),value4(Arg1).
+value12('python:If').
+value13('python:If.body').
+position12(['uast:Position', 9, 3, 49]).
+position13(['uast:Position', 15, 3, 55]).
 positions15(['uast:Positions', Start, End]) :- position12(Start), position13(End).
-array7([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3).
-object5(Obj) :- !,value8(Obj);value9(Obj);positions15(Obj);array7(Obj).
-array8([Arg0]) :- object5(Arg0).
-object6(Obj) :- !,array6(Obj);value18(Obj);array8(Obj).
-value19('python:BoxedName').
-position14(['uast:Position', 8, 2, 33]).
-position15(['uast:Position', 9, 2, 34]).
+value14('Return').
+value15('Statement').
+array5([Arg0,Arg1]) :- value14(Arg0),value15(Arg1).
+value16('python:Return').
+value17('return').
+position14(['uast:Position', 16, 3, 56]).
+position15(['uast:Position', 17, 3, 57]).
 positions16(['uast:Positions', Start, End]) :- position14(Start), position15(End).
-identifier4(['uast:Identifier', 'n', Pos, [Role0]]) :- positions16(Pos),role0(Role0).
-value20('Load').
-value21('Left').
-array9([Arg0,Arg1]) :- value4(Arg0),value21(Arg1).
-object7(Obj) :- !,value19(Obj);identifier4(Obj);value20(Obj);array9(Obj).
-array10([Arg0]) :- value4(Arg0).
-value22('python:Compare.ops').
-positions17(['uast:Positions', _, _]).
-value23('Operator').
-value24('Relational').
-value25('Equal').
-array11([Arg0,Arg1,Arg2]) :- value23(Arg0),value24(Arg1),value25(Arg2).
-value26('python:Eq').
-value27('==').
-object8(Obj) :- !,positions17(Obj);array11(Obj);value26(Obj);value27(Obj).
-array12([Arg0]) :- object8(Arg0).
-object9(Obj) :- !,array10(Obj);value22(Obj);array12(Obj).
-positions18(['uast:Positions', Start, _]) :- position14(Start).
-value28('Binary').
-value29('Condition').
-array13([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value28(Arg1),value29(Arg2),value13(Arg3).
-object10(Obj) :- !,value16(Obj);object6(Obj);object7(Obj);object9(Obj);positions18(Obj);array13(Obj).
-position16(['uast:Position', 5, 2, 30]).
-position17(['uast:Position', 7, 2, 32]).
-positions19(['uast:Positions', Start, End]) :- position16(Start), position17(End).
-array14([Arg0,Arg1]) :- value13(Arg0),value4(Arg1).
-value30('python:If').
-value31('Then').
-array15([Arg0,Arg1,Arg2]) :- value13(Arg0),value14(Arg1),value31(Arg2).
-value32('python:If.body').
-position18(['uast:Position', 9, 3, 49]).
-position19(['uast:Position', 15, 3, 55]).
-positions20(['uast:Positions', Start, End]) :- position18(Start), position19(End).
-value33('Return').
-value34('Statement').
-array16([Arg0,Arg1]) :- value33(Arg0),value34(Arg1).
-value35('python:Return').
-value36('return').
-position20(['uast:Position', 16, 3, 56]).
-position21(['uast:Position', 17, 3, 57]).
+identifier4(['uast:Identifier', 'a', Pos, [Role0]]) :- positions16(Pos),role0(Role0).
+value18('Load').
+value19('python:BoxedName').
+object4(Obj) :- identifier4(Obj), !.
+object4(Obj) :- value18(Obj), !.
+object4(Obj) :- value19(Obj), !.
+object5(Obj) :- positions15(Obj), !.
+object5(Obj) :- array5(Obj), !.
+object5(Obj) :- value16(Obj), !.
+object5(Obj) :- value17(Obj), !.
+object5(Obj) :- object4(Obj), !.
+array6([Arg0]) :- object5(Arg0).
+value20('Body').
+value21('Then').
+array7([Arg0,Arg1,Arg2]) :- value11(Arg0),value20(Arg1),value21(Arg2).
+object6(Obj) :- array6(Obj), !.
+object6(Obj) :- array7(Obj), !.
+object6(Obj) :- value13(Obj), !.
+value22('if').
+value23('Else').
+array8([Arg0,Arg1,Arg2]) :- value11(Arg0),value20(Arg1),value23(Arg2).
+value24('python:If.orelse').
+value25('else').
+array9([]).
+object7(Obj) :- array9(Obj), !.
+object7(Obj) :- array8(Obj), !.
+object7(Obj) :- value24(Obj), !.
+object7(Obj) :- value25(Obj), !.
+position16(['uast:Position', 8, 2, 33]).
+positions17(['uast:Positions', Start, _]) :- position16(Start).
+value26('Binary').
+value27('Condition').
+array10([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value26(Arg1),value27(Arg2),value11(Arg3).
+value28('python:Compare').
+value29('Right').
+array11([Arg0,Arg1]) :- value4(Arg0),value29(Arg1).
+value30('python:Compare.comparators').
+position17(['uast:Position', 13, 2, 38]).
+position18(['uast:Position', 14, 2, 39]).
+positions18(['uast:Positions', Start, End]) :- position17(Start), position18(End).
+array12([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3).
+object8(Obj) :- value9(Obj), !.
+object8(Obj) :- positions18(Obj), !.
+object8(Obj) :- array12(Obj), !.
+object8(Obj) :- value8(Obj), !.
+array13([Arg0]) :- object8(Arg0).
+object9(Obj) :- array11(Obj), !.
+object9(Obj) :- value30(Obj), !.
+object9(Obj) :- array13(Obj), !.
+value31('Left').
+array14([Arg0,Arg1]) :- value4(Arg0),value31(Arg1).
+position19(['uast:Position', 9, 2, 34]).
+positions19(['uast:Positions', Start, End]) :- position16(Start), position19(End).
+identifier5(['uast:Identifier', 'n', Pos, [Role0]]) :- positions19(Pos),role0(Role0).
+object10(Obj) :- array14(Obj), !.
+object10(Obj) :- value19(Obj), !.
+object10(Obj) :- identifier5(Obj), !.
+object10(Obj) :- value18(Obj), !.
+array15([Arg0]) :- value4(Arg0).
+value32('python:Compare.ops').
+positions20(['uast:Positions', _, _]).
+value33('Operator').
+value34('Relational').
+value35('Equal').
+array16([Arg0,Arg1,Arg2]) :- value33(Arg0),value34(Arg1),value35(Arg2).
+value36('python:Eq').
+value37('==').
+object11(Obj) :- array16(Obj), !.
+object11(Obj) :- value36(Obj), !.
+object11(Obj) :- value37(Obj), !.
+object11(Obj) :- positions20(Obj), !.
+array17([Arg0]) :- object11(Arg0).
+object12(Obj) :- array15(Obj), !.
+object12(Obj) :- value32(Obj), !.
+object12(Obj) :- array17(Obj), !.
+object13(Obj) :- object10(Obj), !.
+object13(Obj) :- object12(Obj), !.
+object13(Obj) :- positions17(Obj), !.
+object13(Obj) :- array10(Obj), !.
+object13(Obj) :- value28(Obj), !.
+object13(Obj) :- object9(Obj), !.
+position20(['uast:Position', 5, 2, 30]).
+position21(['uast:Position', 7, 2, 32]).
 positions21(['uast:Positions', Start, End]) :- position20(Start), position21(End).
-identifier5(['uast:Identifier', 'a', Pos, [Role0]]) :- positions21(Pos),role0(Role0).
-object11(Obj) :- !,value19(Obj);identifier5(Obj);value20(Obj).
-object12(Obj) :- !,positions20(Obj);array16(Obj);value35(Obj);value36(Obj);object11(Obj).
-array17([Arg0]) :- object12(Arg0).
-object13(Obj) :- !,array15(Obj);value32(Obj);array17(Obj).
-value37('if').
-object14(Obj) :- !,object4(Obj);object10(Obj);positions19(Obj);array14(Obj);value30(Obj);object13(Obj);value37(Obj).
-array18([Arg0,Arg1]) :- value13(Arg0),value4(Arg1).
-array19([Arg0,Arg1,Arg2]) :- value13(Arg0),value14(Arg1),value31(Arg2).
-position22(['uast:Position', 16, 5, 88]).
-position23(['uast:Position', 17, 5, 89]).
+object14(Obj) :- positions21(Obj), !.
+object14(Obj) :- array4(Obj), !.
+object14(Obj) :- value12(Obj), !.
+object14(Obj) :- object6(Obj), !.
+object14(Obj) :- value22(Obj), !.
+object14(Obj) :- object7(Obj), !.
+object14(Obj) :- object13(Obj), !.
+position22(['uast:Position', 5, 4, 62]).
+position23(['uast:Position', 7, 4, 64]).
 positions22(['uast:Positions', Start, End]) :- position22(Start), position23(End).
-identifier6(['uast:Identifier', 'b', Pos, [Role0]]) :- positions22(Pos),role0(Role0).
-object15(Obj) :- !,value19(Obj);identifier6(Obj);value20(Obj).
+array18([Arg0,Arg1]) :- value11(Arg0),value4(Arg1).
+array19([Arg0,Arg1,Arg2]) :- value11(Arg0),value20(Arg1),value21(Arg2).
 position24(['uast:Position', 9, 5, 81]).
 position25(['uast:Position', 15, 5, 87]).
 positions23(['uast:Positions', Start, End]) :- position24(Start), position25(End).
-array20([Arg0,Arg1]) :- value33(Arg0),value34(Arg1).
-object16(Obj) :- !,object15(Obj);positions23(Obj);array20(Obj);value35(Obj);value36(Obj).
-array21([Arg0]) :- object16(Arg0).
-object17(Obj) :- !,array19(Obj);value32(Obj);array21(Obj).
-array22([Arg0,Arg1,Arg2]) :- value13(Arg0),value14(Arg1),value15(Arg2).
-array23([]).
-object18(Obj) :- !,array22(Obj);value11(Obj);value12(Obj);array23(Obj).
-array24([Arg0,Arg1]) :- value4(Arg0),value17(Arg1).
-position26(['uast:Position', 13, 4, 70]).
-position27(['uast:Position', 14, 4, 71]).
+array20([Arg0,Arg1]) :- value14(Arg0),value15(Arg1).
+position26(['uast:Position', 16, 5, 88]).
+position27(['uast:Position', 17, 5, 89]).
 positions24(['uast:Positions', Start, End]) :- position26(Start), position27(End).
-array25([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3).
-object19(Obj) :- !,positions24(Obj);array25(Obj);value8(Obj);value10(Obj).
-array26([Arg0]) :- object19(Arg0).
-object20(Obj) :- !,array24(Obj);value18(Obj);array26(Obj).
-position28(['uast:Position', 8, 4, 65]).
-position29(['uast:Position', 9, 4, 66]).
+identifier6(['uast:Identifier', 'b', Pos, [Role0]]) :- positions24(Pos),role0(Role0).
+object15(Obj) :- identifier6(Obj), !.
+object15(Obj) :- value18(Obj), !.
+object15(Obj) :- value19(Obj), !.
+object16(Obj) :- positions23(Obj), !.
+object16(Obj) :- array20(Obj), !.
+object16(Obj) :- value16(Obj), !.
+object16(Obj) :- value17(Obj), !.
+object16(Obj) :- object15(Obj), !.
+array21([Arg0]) :- object16(Arg0).
+object17(Obj) :- array19(Obj), !.
+object17(Obj) :- value13(Obj), !.
+object17(Obj) :- array21(Obj), !.
+array22([Arg0,Arg1,Arg2]) :- value11(Arg0),value20(Arg1),value23(Arg2).
+array23([]).
+object18(Obj) :- array22(Obj), !.
+object18(Obj) :- value24(Obj), !.
+object18(Obj) :- value25(Obj), !.
+object18(Obj) :- array23(Obj), !.
+position28(['uast:Position', 13, 4, 70]).
+position29(['uast:Position', 14, 4, 71]).
 positions25(['uast:Positions', Start, End]) :- position28(Start), position29(End).
-identifier7(['uast:Identifier', 'n', Pos, [Role0]]) :- positions25(Pos),role0(Role0).
-array27([Arg0,Arg1]) :- value4(Arg0),value21(Arg1).
-object21(Obj) :- !,identifier7(Obj);value20(Obj);array27(Obj);value19(Obj).
-array28([Arg0]) :- value4(Arg0).
-positions26(['uast:Positions', _, _]).
-array29([Arg0,Arg1,Arg2]) :- value23(Arg0),value24(Arg1),value25(Arg2).
-object22(Obj) :- !,positions26(Obj);array29(Obj);value26(Obj);value27(Obj).
-array30([Arg0]) :- object22(Arg0).
-object23(Obj) :- !,array28(Obj);value22(Obj);array30(Obj).
-positions27(['uast:Positions', Start, _]) :- position28(Start).
-array31([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value28(Arg1),value29(Arg2),value13(Arg3).
-object24(Obj) :- !,value16(Obj);object20(Obj);object21(Obj);object23(Obj);positions27(Obj);array31(Obj).
-position30(['uast:Position', 5, 4, 62]).
-position31(['uast:Position', 7, 4, 64]).
-positions28(['uast:Positions', Start, End]) :- position30(Start), position31(End).
-object25(Obj) :- !,array18(Obj);value30(Obj);object17(Obj);value37(Obj);object18(Obj);object24(Obj);positions28(Obj).
-position32(['uast:Position', 5, 6, 94]).
-position33(['uast:Position', 11, 6, 100]).
-positions29(['uast:Positions', Start, End]) :- position32(Start), position33(End).
-array32([Arg0,Arg1]) :- value33(Arg0),value34(Arg1).
-value38('Arithmetic').
-value39('Substract').
-array33([Arg0,Arg1,Arg2,Arg3]) :- value23(Arg0),value38(Arg1),value39(Arg2),value28(Arg3).
-value40('python:Sub').
-value41('-').
-positions30(['uast:Positions', _, _]).
-object26(Obj) :- !,array33(Obj);value40(Obj);value41(Obj);positions30(Obj).
+array24([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3).
+object19(Obj) :- value10(Obj), !.
+object19(Obj) :- positions25(Obj), !.
+object19(Obj) :- array24(Obj), !.
+object19(Obj) :- value8(Obj), !.
+array25([Arg0]) :- object19(Arg0).
+array26([Arg0,Arg1]) :- value4(Arg0),value29(Arg1).
+object20(Obj) :- array25(Obj), !.
+object20(Obj) :- array26(Obj), !.
+object20(Obj) :- value30(Obj), !.
+position30(['uast:Position', 8, 4, 65]).
+position31(['uast:Position', 9, 4, 66]).
+positions26(['uast:Positions', Start, End]) :- position30(Start), position31(End).
+identifier7(['uast:Identifier', 'n', Pos, [Role0]]) :- positions26(Pos),role0(Role0).
+array27([Arg0,Arg1]) :- value4(Arg0),value31(Arg1).
+object21(Obj) :- array27(Obj), !.
+object21(Obj) :- value19(Obj), !.
+object21(Obj) :- identifier7(Obj), !.
+object21(Obj) :- value18(Obj), !.
+positions27(['uast:Positions', _, _]).
+array28([Arg0,Arg1,Arg2]) :- value33(Arg0),value34(Arg1),value35(Arg2).
+object22(Obj) :- value36(Obj), !.
+object22(Obj) :- value37(Obj), !.
+object22(Obj) :- positions27(Obj), !.
+object22(Obj) :- array28(Obj), !.
+array29([Arg0]) :- object22(Arg0).
+array30([Arg0]) :- value4(Arg0).
+object23(Obj) :- value32(Obj), !.
+object23(Obj) :- array29(Obj), !.
+object23(Obj) :- array30(Obj), !.
+positions28(['uast:Positions', Start, _]) :- position30(Start).
+array31([Arg0,Arg1,Arg2,Arg3]) :- value4(Arg0),value26(Arg1),value27(Arg2),value11(Arg3).
+object24(Obj) :- object23(Obj), !.
+object24(Obj) :- positions28(Obj), !.
+object24(Obj) :- array31(Obj), !.
+object24(Obj) :- value28(Obj), !.
+object24(Obj) :- object20(Obj), !.
+object24(Obj) :- object21(Obj), !.
+object25(Obj) :- object24(Obj), !.
+object25(Obj) :- positions22(Obj), !.
+object25(Obj) :- array18(Obj), !.
+object25(Obj) :- value12(Obj), !.
+object25(Obj) :- object17(Obj), !.
+object25(Obj) :- value22(Obj), !.
+object25(Obj) :- object18(Obj), !.
+value38('Function').
+value39('Call').
+array32([Arg0,Arg1,Arg2]) :- value38(Arg0),value39(Arg1),value4(Arg2).
+value40('python:Call').
+position32(['uast:Position', 16, 6, 105]).
+positions29(['uast:Positions', Start, _]) :- position32(Start).
+value41('Positional').
+value42('Argument').
+value43('Name').
+array33([Arg0,Arg1,Arg2,Arg3,Arg4,Arg5,Arg6]) :- value4(Arg0),value26(Arg1),value38(Arg2),value39(Arg3),value41(Arg4),value42(Arg5),value43(Arg6).
+value44('python:BinOp').
+position33(['uast:Position', 17, 6, 106]).
+positions30(['uast:Positions', Start, End]) :- position32(Start), position33(End).
+identifier8(['uast:Identifier', 'n', Pos, [Role0]]) :- positions30(Pos),role0(Role0).
+array34([Arg0,Arg1,Arg2]) :- value4(Arg0),value26(Arg1),value31(Arg2).
+object26(Obj) :- value19(Obj), !.
+object26(Obj) :- identifier8(Obj), !.
+object26(Obj) :- value18(Obj), !.
+object26(Obj) :- array34(Obj), !.
+value45('-').
+positions31(['uast:Positions', _, _]).
+value46('Arithmetic').
+value47('Substract').
+array35([Arg0,Arg1,Arg2,Arg3]) :- value33(Arg0),value46(Arg1),value47(Arg2),value26(Arg3).
+value48('python:Sub').
+object27(Obj) :- array35(Obj), !.
+object27(Obj) :- value48(Obj), !.
+object27(Obj) :- value45(Obj), !.
+object27(Obj) :- positions31(Obj), !.
 position34(['uast:Position', 20, 6, 109]).
 position35(['uast:Position', 21, 6, 110]).
-positions31(['uast:Positions', Start, End]) :- position34(Start), position35(End).
-array34([Arg0,Arg1,Arg2,Arg3,Arg4,Arg5]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3),value28(Arg4),value17(Arg5).
-object27(Obj) :- !,positions31(Obj);array34(Obj);value8(Obj);value10(Obj).
-position36(['uast:Position', 16, 6, 105]).
-positions32(['uast:Positions', Start, _]) :- position36(Start).
-value42('Function').
-value43('Call').
-value44('Positional').
-value45('Argument').
-value46('Name').
-array35([Arg0,Arg1,Arg2,Arg3,Arg4,Arg5,Arg6]) :- value4(Arg0),value28(Arg1),value42(Arg2),value43(Arg3),value44(Arg4),value45(Arg5),value46(Arg6).
-value47('python:BinOp').
-array36([Arg0,Arg1,Arg2]) :- value4(Arg0),value28(Arg1),value21(Arg2).
-position37(['uast:Position', 17, 6, 106]).
+positions32(['uast:Positions', Start, End]) :- position34(Start), position35(End).
+array36([Arg0,Arg1,Arg2,Arg3,Arg4,Arg5]) :- value4(Arg0),value5(Arg1),value6(Arg2),value7(Arg3),value26(Arg4),value29(Arg5).
+object28(Obj) :- positions32(Obj), !.
+object28(Obj) :- array36(Obj), !.
+object28(Obj) :- value8(Obj), !.
+object28(Obj) :- value10(Obj), !.
+object29(Obj) :- positions29(Obj), !.
+object29(Obj) :- array33(Obj), !.
+object29(Obj) :- value44(Obj), !.
+object29(Obj) :- object26(Obj), !.
+object29(Obj) :- object27(Obj), !.
+object29(Obj) :- object28(Obj), !.
+array37([Arg0,Arg1,Arg2,Arg3,Arg4]) :- value38(Arg0),value39(Arg1),value41(Arg2),value42(Arg3),value43(Arg4).
+position36(['uast:Position', 23, 6, 112]).
+position37(['uast:Position', 24, 6, 113]).
 positions33(['uast:Positions', Start, End]) :- position36(Start), position37(End).
-identifier8(['uast:Identifier', 'n', Pos, [Role0]]) :- positions33(Pos),role0(Role0).
-object28(Obj) :- !,array36(Obj);value19(Obj);identifier8(Obj);value20(Obj).
-object29(Obj) :- !,object26(Obj);object27(Obj);positions32(Obj);array35(Obj);value47(Obj);object28(Obj).
-array37([Arg0,Arg1,Arg2,Arg3,Arg4]) :- value42(Arg0),value43(Arg1),value44(Arg2),value45(Arg3),value46(Arg4).
-position38(['uast:Position', 23, 6, 112]).
-position39(['uast:Position', 24, 6, 113]).
-positions34(['uast:Positions', Start, End]) :- position38(Start), position39(End).
-identifier9(['uast:Identifier', 'b', Pos, [Role0]]) :- positions34(Pos),role0(Role0).
-object30(Obj) :- !,value20(Obj);array37(Obj);value19(Obj);identifier9(Obj).
-array38([Arg0,Arg1,Arg2]) :- value4(Arg0),value28(Arg1),value17(Arg2).
+identifier9(['uast:Identifier', 'b', Pos, [Role0]]) :- positions33(Pos),role0(Role0).
+object30(Obj) :- value19(Obj), !.
+object30(Obj) :- identifier9(Obj), !.
+object30(Obj) :- value18(Obj), !.
+object30(Obj) :- array37(Obj), !.
+position38(['uast:Position', 26, 6, 115]).
+positions34(['uast:Positions', Start, _]) :- position38(Start).
+array38([Arg0,Arg1,Arg2,Arg3,Arg4,Arg5,Arg6]) :- value4(Arg0),value26(Arg1),value38(Arg2),value39(Arg3),value41(Arg4),value42(Arg5),value43(Arg6).
+position39(['uast:Position', 27, 6, 116]).
+positions35(['uast:Positions', Start, End]) :- position38(Start), position39(End).
+identifier10(['uast:Identifier', 'a', Pos, [Role0]]) :- positions35(Pos),role0(Role0).
+array39([Arg0,Arg1,Arg2]) :- value4(Arg0),value26(Arg1),value31(Arg2).
+object31(Obj) :- value19(Obj), !.
+object31(Obj) :- identifier10(Obj), !.
+object31(Obj) :- value18(Obj), !.
+object31(Obj) :- array39(Obj), !.
+value49('+').
+positions36(['uast:Positions', _, _]).
+value50('Add').
+array40([Arg0,Arg1,Arg2,Arg3]) :- value33(Arg0),value46(Arg1),value50(Arg2),value26(Arg3).
+value51('python:Add').
+object32(Obj) :- value51(Obj), !.
+object32(Obj) :- value49(Obj), !.
+object32(Obj) :- positions36(Obj), !.
+object32(Obj) :- array40(Obj), !.
+array41([Arg0,Arg1,Arg2]) :- value4(Arg0),value26(Arg1),value29(Arg2).
 position40(['uast:Position', 30, 6, 119]).
 position41(['uast:Position', 31, 6, 120]).
-positions35(['uast:Positions', Start, End]) :- position40(Start), position41(End).
-identifier10(['uast:Identifier', 'b', Pos, [Role0]]) :- positions35(Pos),role0(Role0).
-object31(Obj) :- !,value20(Obj);array38(Obj);value19(Obj);identifier10(Obj).
-position42(['uast:Position', 26, 6, 115]).
-positions36(['uast:Positions', Start, _]) :- position42(Start).
-array39([Arg0,Arg1,Arg2,Arg3,Arg4,Arg5,Arg6]) :- value4(Arg0),value28(Arg1),value42(Arg2),value43(Arg3),value44(Arg4),value45(Arg5),value46(Arg6).
-array40([Arg0,Arg1,Arg2]) :- value4(Arg0),value28(Arg1),value21(Arg2).
-position43(['uast:Position', 27, 6, 116]).
-positions37(['uast:Positions', Start, End]) :- position42(Start), position43(End).
-identifier11(['uast:Identifier', 'a', Pos, [Role0]]) :- positions37(Pos),role0(Role0).
-object32(Obj) :- !,array40(Obj);value19(Obj);identifier11(Obj);value20(Obj).
-positions38(['uast:Positions', _, _]).
-value48('Add').
-array41([Arg0,Arg1,Arg2,Arg3]) :- value23(Arg0),value38(Arg1),value48(Arg2),value28(Arg3).
-value49('python:Add').
-value50('+').
-object33(Obj) :- !,positions38(Obj);array41(Obj);value49(Obj);value50(Obj).
-object34(Obj) :- !,object31(Obj);positions36(Obj);array39(Obj);value47(Obj);object32(Obj);object33(Obj).
+positions37(['uast:Positions', Start, End]) :- position40(Start), position41(End).
+identifier11(['uast:Identifier', 'b', Pos, [Role0]]) :- positions37(Pos),role0(Role0).
+object33(Obj) :- value19(Obj), !.
+object33(Obj) :- identifier11(Obj), !.
+object33(Obj) :- value18(Obj), !.
+object33(Obj) :- array41(Obj), !.
+object34(Obj) :- object33(Obj), !.
+object34(Obj) :- positions34(Obj), !.
+object34(Obj) :- array38(Obj), !.
+object34(Obj) :- value44(Obj), !.
+object34(Obj) :- object31(Obj), !.
+object34(Obj) :- object32(Obj), !.
 array42([Arg0,Arg1,Arg2]) :- object29(Arg0),object30(Arg1),object34(Arg2).
-value51('Callee').
-array43([Arg0,Arg1]) :- value43(Arg0),value51(Arg1).
-position44(['uast:Position', 12, 6, 101]).
-position45(['uast:Position', 15, 6, 104]).
-positions39(['uast:Positions', Start, End]) :- position44(Start), position45(End).
-identifier12(['uast:Identifier', 'fib', Pos, [Role0]]) :- positions39(Pos),role0(Role0).
-object35(Obj) :- !,value20(Obj);array43(Obj);value19(Obj);identifier12(Obj).
+position42(['uast:Position', 12, 6, 101]).
+position43(['uast:Position', 15, 6, 104]).
+positions38(['uast:Positions', Start, End]) :- position42(Start), position43(End).
+identifier12(['uast:Identifier', 'fib', Pos, [Role0]]) :- positions38(Pos),role0(Role0).
+value52('Callee').
+array43([Arg0,Arg1]) :- value39(Arg0),value52(Arg1).
+object35(Obj) :- value19(Obj), !.
+object35(Obj) :- identifier12(Obj), !.
+object35(Obj) :- value18(Obj), !.
+object35(Obj) :- array43(Obj), !.
 array44([]).
-positions40(['uast:Positions', Start, _]) :- position44(Start).
-array45([Arg0,Arg1,Arg2]) :- value42(Arg0),value43(Arg1),value4(Arg2).
-value52('python:Call').
-object36(Obj) :- !,array42(Obj);object35(Obj);array44(Obj);positions40(Obj);array45(Obj);value52(Obj).
-object37(Obj) :- !,positions29(Obj);array32(Obj);value35(Obj);value36(Obj);object36(Obj).
+positions39(['uast:Positions', Start, _]) :- position42(Start).
+object36(Obj) :- array32(Obj), !.
+object36(Obj) :- value40(Obj), !.
+object36(Obj) :- array42(Obj), !.
+object36(Obj) :- object35(Obj), !.
+object36(Obj) :- array44(Obj), !.
+object36(Obj) :- positions39(Obj), !.
+position44(['uast:Position', 5, 6, 94]).
+position45(['uast:Position', 11, 6, 100]).
+positions40(['uast:Positions', Start, End]) :- position44(Start), position45(End).
+array45([Arg0,Arg1]) :- value14(Arg0),value15(Arg1).
+object37(Obj) :- value16(Obj), !.
+object37(Obj) :- value17(Obj), !.
+object37(Obj) :- object36(Obj), !.
+object37(Obj) :- positions40(Obj), !.
+object37(Obj) :- array45(Obj), !.
 block0(['uast:Block', [Stmt0,Stmt1,Stmt2], Pos]) :- positions14(Pos),object14(Stmt0),object25(Stmt1),object37(Stmt2).
 positions41(['uast:Positions', _, _]).
 function0(['uast:Function', FnType, Body, Pos]) :- function_type0(FnType),block0(Body),positions41(Pos).
@@ -921,7 +1042,10 @@ identifier13(['uast:Identifier', 'fib', Pos, [Role0]]) :- positions42(Pos),role0
 alias0(['uast:Alias', Name, Node, Pos]) :- identifier13(Name),function0(Node),positions2(Pos).
 function_group0(['uast:FunctionGroup', [Node0,Node1], Pos]) :- positions1(Pos),object1(Node0),alias0(Node1).
 array46([Arg0]) :- function_group0(Arg0).
-object38(Obj) :- !,positions0(Obj);array0(Obj);value2(Obj);array46(Obj).
+object38(Obj) :- positions0(Obj), !.
+object38(Obj) :- array0(Obj), !.
+object38(Obj) :- value2(Obj), !.
+object38(Obj) :- array46(Obj), !.
 
 % value(Val).
 value(X) :- value0(X);value1(X);value2(X);value3(X);value4(X);value5(X);value6(X);value7(X);value8(X);value9(X);value10(X);value11(X);value12(X);value13(X);value14(X);value15(X);value16(X);value17(X);value18(X);value19(X);value20(X);value21(X);value22(X);value23(X);value24(X);value25(X);value26(X);value27(X);value28(X);value29(X);value30(X);value31(X);value32(X);value33(X);value34(X);value35(X);value36(X);value37(X);value38(X);value39(X);value40(X);value41(X);value42(X);value43(X);value44(X);value45(X);value46(X);value47(X);value48(X);value49(X);value50(X);value51(X);value52(X).
@@ -1985,234 +2109,317 @@ public class Hello extends GenericServlet {
 <p>
 
 ```prolog
-position0(['uast:Position', 5, 6, 105]).
-position1(['uast:Position', 6, 15, 443]).
-positions0(['uast:Positions', Start, End]) :- position0(Start), position1(End).
-position2(['uast:Position', 11, 6, 111]).
-positions1(['uast:Positions', Start, End]) :- position0(Start), position2(End).
 value0('Visibility').
 value1('World').
-array0([Arg0,Arg1]) :- value0(Arg0),value1(Arg1).
-value2('java:Modifier').
-value3('public').
-object0(Obj) :- !,positions1(Obj);array0(Obj);value2(Obj);value3(Obj).
-array1([Arg0]) :- object0(Arg0).
-positions2(['uast:Positions', _, _]).
-positions3(['uast:Positions', _, _]).
-position3(['uast:Position', 46, 6, 146]).
-position4(['uast:Position', 53, 6, 153]).
-positions4(['uast:Positions', Start, End]) :- position3(Start), position4(End).
+value2('Declaration').
+value3('Type').
+array0([Arg0,Arg1,Arg2,Arg3]) :- value0(Arg0),value1(Arg1),value2(Arg2),value3(Arg3).
+value4('java:TypeDeclaration').
+value5('false').
+position0(['uast:Position', 1, 5, 57]).
+position1(['uast:Position', 7, 5, 63]).
+positions0(['uast:Positions', Start, End]) :- position0(Start), position1(End).
+array1([Arg0,Arg1]) :- value0(Arg0),value1(Arg1).
+value6('java:Modifier').
+value7('public').
+object0(Obj) :- positions0(Obj), !.
+object0(Obj) :- array1(Obj), !.
+object0(Obj) :- value6(Obj), !.
+object0(Obj) :- value7(Obj), !.
+array2([Arg0]) :- object0(Arg0).
+position2(['uast:Position', 2, 16, 445]).
+positions1(['uast:Positions', Start, End]) :- position0(Start), position2(End).
+position3(['uast:Position', 14, 5, 70]).
+position4(['uast:Position', 19, 5, 75]).
+positions2(['uast:Positions', Start, End]) :- position3(Start), position4(End).
 role0('Identifier').
-identifier0(['uast:Identifier', 'request', Pos, [Role0]]) :- positions4(Pos),role0(Role0).
-position5(['uast:Position', 31, 6, 131]).
-position6(['uast:Position', 45, 6, 145]).
-positions5(['uast:Positions', Start, End]) :- position5(Start), position6(End).
-identifier1(['uast:Identifier', 'ServletRequest', Pos, [Role0]]) :- positions5(Pos),role0(Role0).
-positions6(['uast:Positions', Start, End]) :- position5(Start), position6(End).
-value4('Type').
-array2([Arg0]) :- value4(Arg0).
-value5('java:SimpleType').
-object1(Obj) :- !,identifier1(Obj);positions6(Obj);array2(Obj);value5(Obj).
-position7(['uast:Position', 25, 6, 125]).
-positions7(['uast:Positions', Start, End]) :- position7(Start), position4(End).
-argument0(['uast:Argument', Name, Type, _, false, false, false, Pos]) :- identifier0(Name),object1(Type),positions7(Pos).
-position8(['uast:Position', 77, 6, 177]).
-position9(['uast:Position', 85, 6, 185]).
-positions8(['uast:Positions', Start, End]) :- position8(Start), position9(End).
-identifier2(['uast:Identifier', 'response', Pos, [Role0]]) :- positions8(Pos),role0(Role0).
-position10(['uast:Position', 61, 6, 161]).
-position11(['uast:Position', 76, 6, 176]).
+identifier0(['uast:Identifier', 'Hello', Pos, [Role0]]) :- positions2(Pos),role0(Role0).
+position5(['uast:Position', 28, 5, 84]).
+position6(['uast:Position', 42, 5, 98]).
+positions3(['uast:Positions', Start, End]) :- position5(Start), position6(End).
+array3([Arg0]) :- value3(Arg0).
+value8('java:SimpleType').
+positions4(['uast:Positions', Start, End]) :- position5(Start), position6(End).
+identifier1(['uast:Identifier', 'GenericServlet', Pos, [Role0]]) :- positions4(Pos),role0(Role0).
+object1(Obj) :- positions3(Obj), !.
+object1(Obj) :- array3(Obj), !.
+object1(Obj) :- value8(Obj), !.
+object1(Obj) :- identifier1(Obj), !.
+position7(['uast:Position', 5, 6, 105]).
+position8(['uast:Position', 6, 15, 443]).
+positions5(['uast:Positions', Start, End]) :- position7(Start), position8(End).
+position9(['uast:Position', 11, 6, 111]).
+positions6(['uast:Positions', Start, End]) :- position7(Start), position9(End).
+array4([Arg0,Arg1]) :- value0(Arg0),value1(Arg1).
+object2(Obj) :- value6(Obj), !.
+object2(Obj) :- value7(Obj), !.
+object2(Obj) :- positions6(Obj), !.
+object2(Obj) :- array4(Obj), !.
+array5([Arg0]) :- object2(Arg0).
+positions7(['uast:Positions', _, _]).
+positions8(['uast:Positions', _, _]).
+position10(['uast:Position', 46, 6, 146]).
+position11(['uast:Position', 53, 6, 153]).
 positions9(['uast:Positions', Start, End]) :- position10(Start), position11(End).
-array3([Arg0]) :- value4(Arg0).
-positions10(['uast:Positions', Start, End]) :- position10(Start), position11(End).
-identifier3(['uast:Identifier', 'ServletResponse', Pos, [Role0]]) :- positions10(Pos),role0(Role0).
-object2(Obj) :- !,positions9(Obj);array3(Obj);value5(Obj);identifier3(Obj).
-position12(['uast:Position', 55, 6, 155]).
-positions11(['uast:Positions', Start, End]) :- position12(Start), position9(End).
-argument1(['uast:Argument', Name, Type, _, false, false, false, Pos]) :- identifier2(Name),object2(Type),positions11(Pos).
-function_type0(['uast:FunctionType', [Arg0,Arg1], [], Pos]) :- argument0(Arg0),argument1(Arg1),positions3(Pos).
-position13(['uast:Position', 42, 7, 228]).
-positions12(['uast:Positions', Start, End]) :- position13(Start), position1(End).
-value6('Statement').
-array4([Arg0]) :- value6(Arg0).
-value7('java:ExpressionStatement').
-position14(['uast:Position', 9, 8, 238]).
-position15(['uast:Position', 17, 8, 246]).
-positions13(['uast:Positions', Start, End]) :- position14(Start), position15(End).
+identifier2(['uast:Identifier', 'request', Pos, [Role0]]) :- positions9(Pos),role0(Role0).
+position12(['uast:Position', 31, 6, 131]).
+position13(['uast:Position', 45, 6, 145]).
+positions10(['uast:Positions', Start, End]) :- position12(Start), position13(End).
+array6([Arg0]) :- value3(Arg0).
+positions11(['uast:Positions', Start, End]) :- position12(Start), position13(End).
+identifier3(['uast:Identifier', 'ServletRequest', Pos, [Role0]]) :- positions11(Pos),role0(Role0).
+object3(Obj) :- value8(Obj), !.
+object3(Obj) :- identifier3(Obj), !.
+object3(Obj) :- positions10(Obj), !.
+object3(Obj) :- array6(Obj), !.
+position14(['uast:Position', 25, 6, 125]).
+positions12(['uast:Positions', Start, End]) :- position14(Start), position11(End).
+argument0(['uast:Argument', Name, Type, _, false, false, false, Pos]) :- identifier2(Name),object3(Type),positions12(Pos).
+position15(['uast:Position', 77, 6, 177]).
+position16(['uast:Position', 85, 6, 185]).
+positions13(['uast:Positions', Start, End]) :- position15(Start), position16(End).
 identifier4(['uast:Identifier', 'response', Pos, [Role0]]) :- positions13(Pos),role0(Role0).
-position16(['uast:Position', 33, 8, 262]).
-position17(['uast:Position', 44, 8, 273]).
-positions14(['uast:Positions', Start, End]) :- position16(Start), position17(End).
-value8('Call').
-value9('Argument').
-value10('Positional').
-array5([Arg0,Arg1,Arg2]) :- value8(Arg0),value9(Arg1),value10(Arg2).
-value11('uast:String').
-value12('').
-value13('text/html').
-object3(Obj) :- !,positions14(Obj);array5(Obj);value11(Obj);value12(Obj);value13(Obj).
-array6([Arg0]) :- object3(Arg0).
-position18(['uast:Position', 45, 8, 274]).
-positions15(['uast:Positions', Start, End]) :- position14(Start), position18(End).
-value14('Expression').
-array7([Arg0,Arg1]) :- value14(Arg0),value8(Arg1).
-value15('java:MethodInvocation').
-position19(['uast:Position', 18, 8, 247]).
-position20(['uast:Position', 32, 8, 261]).
-positions16(['uast:Positions', Start, End]) :- position19(Start), position20(End).
-identifier5(['uast:Identifier', 'setContentType', Pos, [Role0]]) :- positions16(Pos),role0(Role0).
-object4(Obj) :- !,identifier4(Obj);array6(Obj);positions15(Obj);array7(Obj);value15(Obj);identifier5(Obj).
-position21(['uast:Position', 46, 8, 275]).
-positions17(['uast:Positions', Start, End]) :- position14(Start), position21(End).
-object5(Obj) :- !,array4(Obj);value7(Obj);object4(Obj);positions17(Obj).
-value16('java:VariableDeclarationStatement').
-value17('Incomplete').
-array8([Arg0]) :- value17(Arg0).
-value18('final').
-position22(['uast:Position', 9, 9, 284]).
-position23(['uast:Position', 14, 9, 289]).
-positions18(['uast:Positions', Start, End]) :- position22(Start), position23(End).
-object6(Obj) :- !,array8(Obj);value2(Obj);value18(Obj);positions18(Obj).
-array9([Arg0]) :- object6(Arg0).
-value19('java:VariableDeclarationFragment').
-position24(['uast:Position', 27, 9, 302]).
-position25(['uast:Position', 29, 9, 304]).
-positions19(['uast:Positions', Start, End]) :- position24(Start), position25(End).
-identifier6(['uast:Identifier', 'pw', Pos, [Role0]]) :- positions19(Pos),role0(Role0).
-position26(['uast:Position', 32, 9, 307]).
-position27(['uast:Position', 52, 9, 327]).
-positions20(['uast:Positions', Start, End]) :- position26(Start), position27(End).
-array10([Arg0,Arg1]) :- value14(Arg0),value8(Arg1).
-position28(['uast:Position', 41, 9, 316]).
-position29(['uast:Position', 50, 9, 325]).
-positions21(['uast:Positions', Start, End]) :- position28(Start), position29(End).
-identifier7(['uast:Identifier', 'getWriter', Pos, [Role0]]) :- positions21(Pos),role0(Role0).
-position30(['uast:Position', 40, 9, 315]).
-positions22(['uast:Positions', Start, End]) :- position26(Start), position30(End).
-identifier8(['uast:Identifier', 'response', Pos, [Role0]]) :- positions22(Pos),role0(Role0).
-object7(Obj) :- !,positions20(Obj);array10(Obj);value15(Obj);identifier7(Obj);identifier8(Obj).
-positions23(['uast:Positions', Start, End]) :- position24(Start), position27(End).
-value20('Declaration').
-value21('Variable').
-array11([Arg0,Arg1]) :- value20(Arg0),value21(Arg1).
-object8(Obj) :- !,value19(Obj);identifier6(Obj);object7(Obj);positions23(Obj);array11(Obj).
-array12([Arg0]) :- object8(Arg0).
-position31(['uast:Position', 15, 9, 290]).
-position32(['uast:Position', 26, 9, 301]).
+position17(['uast:Position', 61, 6, 161]).
+position18(['uast:Position', 76, 6, 176]).
+positions14(['uast:Positions', Start, End]) :- position17(Start), position18(End).
+array7([Arg0]) :- value3(Arg0).
+positions15(['uast:Positions', Start, End]) :- position17(Start), position18(End).
+identifier5(['uast:Identifier', 'ServletResponse', Pos, [Role0]]) :- positions15(Pos),role0(Role0).
+object4(Obj) :- positions14(Obj), !.
+object4(Obj) :- array7(Obj), !.
+object4(Obj) :- value8(Obj), !.
+object4(Obj) :- identifier5(Obj), !.
+position19(['uast:Position', 55, 6, 155]).
+positions16(['uast:Positions', Start, End]) :- position19(Start), position16(End).
+argument1(['uast:Argument', Name, Type, _, false, false, false, Pos]) :- identifier4(Name),object4(Type),positions16(Pos).
+function_type0(['uast:FunctionType', [Arg0,Arg1], [], Pos]) :- argument0(Arg0),argument1(Arg1),positions8(Pos).
+position20(['uast:Position', 42, 7, 228]).
+positions17(['uast:Positions', Start, End]) :- position20(Start), position8(End).
+value9('java:ExpressionStatement').
+position21(['uast:Position', 9, 8, 238]).
+position22(['uast:Position', 45, 8, 274]).
+positions18(['uast:Positions', Start, End]) :- position21(Start), position22(End).
+value10('Expression').
+value11('Call').
+array8([Arg0,Arg1]) :- value10(Arg0),value11(Arg1).
+value12('java:MethodInvocation').
+position23(['uast:Position', 18, 8, 247]).
+position24(['uast:Position', 32, 8, 261]).
+positions19(['uast:Positions', Start, End]) :- position23(Start), position24(End).
+identifier6(['uast:Identifier', 'setContentType', Pos, [Role0]]) :- positions19(Pos),role0(Role0).
+position25(['uast:Position', 17, 8, 246]).
+positions20(['uast:Positions', Start, End]) :- position21(Start), position25(End).
+identifier7(['uast:Identifier', 'response', Pos, [Role0]]) :- positions20(Pos),role0(Role0).
+value13('Argument').
+value14('Positional').
+array9([Arg0,Arg1,Arg2]) :- value11(Arg0),value13(Arg1),value14(Arg2).
+value15('uast:String').
+value16('').
+value17('text/html').
+position26(['uast:Position', 33, 8, 262]).
+position27(['uast:Position', 44, 8, 273]).
+positions21(['uast:Positions', Start, End]) :- position26(Start), position27(End).
+object5(Obj) :- value16(Obj), !.
+object5(Obj) :- value17(Obj), !.
+object5(Obj) :- positions21(Obj), !.
+object5(Obj) :- array9(Obj), !.
+object5(Obj) :- value15(Obj), !.
+array10([Arg0]) :- object5(Arg0).
+object6(Obj) :- positions18(Obj), !.
+object6(Obj) :- array8(Obj), !.
+object6(Obj) :- value12(Obj), !.
+object6(Obj) :- identifier6(Obj), !.
+object6(Obj) :- identifier7(Obj), !.
+object6(Obj) :- array10(Obj), !.
+position28(['uast:Position', 46, 8, 275]).
+positions22(['uast:Positions', Start, End]) :- position21(Start), position28(End).
+value18('Statement').
+array11([Arg0]) :- value18(Arg0).
+object7(Obj) :- value9(Obj), !.
+object7(Obj) :- object6(Obj), !.
+object7(Obj) :- positions22(Obj), !.
+object7(Obj) :- array11(Obj), !.
+position29(['uast:Position', 9, 9, 284]).
+position30(['uast:Position', 14, 9, 289]).
+positions23(['uast:Positions', Start, End]) :- position29(Start), position30(End).
+value19('Incomplete').
+array12([Arg0]) :- value19(Arg0).
+value20('final').
+object8(Obj) :- array12(Obj), !.
+object8(Obj) :- value6(Obj), !.
+object8(Obj) :- value20(Obj), !.
+object8(Obj) :- positions23(Obj), !.
+array13([Arg0]) :- object8(Arg0).
+position31(['uast:Position', 32, 9, 307]).
+position32(['uast:Position', 52, 9, 327]).
 positions24(['uast:Positions', Start, End]) :- position31(Start), position32(End).
-array13([Arg0]) :- value4(Arg0).
-positions25(['uast:Positions', Start, End]) :- position31(Start), position32(End).
-identifier9(['uast:Identifier', 'PrintWriter', Pos, [Role0]]) :- positions25(Pos),role0(Role0).
-object9(Obj) :- !,positions24(Obj);array13(Obj);value5(Obj);identifier9(Obj).
-position33(['uast:Position', 53, 9, 328]).
-positions26(['uast:Positions', Start, End]) :- position22(Start), position33(End).
-array14([Arg0,Arg1,Arg2]) :- value6(Arg0),value20(Arg1),value21(Arg2).
-object10(Obj) :- !,value16(Obj);array9(Obj);array12(Obj);object9(Obj);positions26(Obj);array14(Obj).
-position34(['uast:Position', 19, 12, 402]).
-position35(['uast:Position', 10, 14, 437]).
-positions27(['uast:Positions', Start, End]) :- position34(Start), position35(End).
-position36(['uast:Position', 13, 13, 416]).
-position37(['uast:Position', 24, 13, 427]).
+array14([Arg0,Arg1]) :- value10(Arg0),value11(Arg1).
+position33(['uast:Position', 41, 9, 316]).
+position34(['uast:Position', 50, 9, 325]).
+positions25(['uast:Positions', Start, End]) :- position33(Start), position34(End).
+identifier8(['uast:Identifier', 'getWriter', Pos, [Role0]]) :- positions25(Pos),role0(Role0).
+position35(['uast:Position', 40, 9, 315]).
+positions26(['uast:Positions', Start, End]) :- position31(Start), position35(End).
+identifier9(['uast:Identifier', 'response', Pos, [Role0]]) :- positions26(Pos),role0(Role0).
+object9(Obj) :- identifier8(Obj), !.
+object9(Obj) :- identifier9(Obj), !.
+object9(Obj) :- positions24(Obj), !.
+object9(Obj) :- array14(Obj), !.
+object9(Obj) :- value12(Obj), !.
+position36(['uast:Position', 27, 9, 302]).
+positions27(['uast:Positions', Start, End]) :- position36(Start), position32(End).
+value21('Variable').
+array15([Arg0,Arg1]) :- value2(Arg0),value21(Arg1).
+value22('java:VariableDeclarationFragment').
+position37(['uast:Position', 29, 9, 304]).
 positions28(['uast:Positions', Start, End]) :- position36(Start), position37(End).
-array15([Arg0]) :- value6(Arg0).
-position38(['uast:Position', 23, 13, 426]).
-positions29(['uast:Positions', Start, End]) :- position36(Start), position38(End).
-array16([Arg0,Arg1]) :- value14(Arg0),value8(Arg1).
-position39(['uast:Position', 16, 13, 419]).
-position40(['uast:Position', 21, 13, 424]).
-positions30(['uast:Positions', Start, End]) :- position39(Start), position40(End).
-identifier10(['uast:Identifier', 'close', Pos, [Role0]]) :- positions30(Pos),role0(Role0).
-position41(['uast:Position', 15, 13, 418]).
-positions31(['uast:Positions', Start, End]) :- position36(Start), position41(End).
-identifier11(['uast:Identifier', 'pw', Pos, [Role0]]) :- positions31(Pos),role0(Role0).
-object11(Obj) :- !,positions29(Obj);array16(Obj);value15(Obj);identifier10(Obj);identifier11(Obj).
-object12(Obj) :- !,positions28(Obj);array15(Obj);value7(Obj);object11(Obj).
-block0(['uast:Block', [Stmt0], Pos]) :- positions27(Pos),object12(Stmt0).
-position42(['uast:Position', 9, 10, 337]).
-positions32(['uast:Positions', Start, End]) :- position42(Start), position35(End).
-value22('Try').
-array17([Arg0,Arg1]) :- value6(Arg0),value22(Arg1).
-value23('java:TryStatement').
+identifier10(['uast:Identifier', 'pw', Pos, [Role0]]) :- positions28(Pos),role0(Role0).
+object10(Obj) :- object9(Obj), !.
+object10(Obj) :- positions27(Obj), !.
+object10(Obj) :- array15(Obj), !.
+object10(Obj) :- value22(Obj), !.
+object10(Obj) :- identifier10(Obj), !.
+array16([Arg0]) :- object10(Arg0).
+position38(['uast:Position', 15, 9, 290]).
+position39(['uast:Position', 26, 9, 301]).
+positions29(['uast:Positions', Start, End]) :- position38(Start), position39(End).
+array17([Arg0]) :- value3(Arg0).
+positions30(['uast:Positions', Start, End]) :- position38(Start), position39(End).
+identifier11(['uast:Identifier', 'PrintWriter', Pos, [Role0]]) :- positions30(Pos),role0(Role0).
+object11(Obj) :- positions29(Obj), !.
+object11(Obj) :- array17(Obj), !.
+object11(Obj) :- value8(Obj), !.
+object11(Obj) :- identifier11(Obj), !.
+position40(['uast:Position', 53, 9, 328]).
+positions31(['uast:Positions', Start, End]) :- position29(Start), position40(End).
+array18([Arg0,Arg1,Arg2]) :- value18(Arg0),value2(Arg1),value21(Arg2).
+value23('java:VariableDeclarationStatement').
+object12(Obj) :- array13(Obj), !.
+object12(Obj) :- array16(Obj), !.
+object12(Obj) :- object11(Obj), !.
+object12(Obj) :- positions31(Obj), !.
+object12(Obj) :- array18(Obj), !.
+object12(Obj) :- value23(Obj), !.
+position41(['uast:Position', 9, 10, 337]).
+position42(['uast:Position', 10, 14, 437]).
+positions32(['uast:Positions', Start, End]) :- position41(Start), position42(End).
+value24('Try').
+array19([Arg0,Arg1]) :- value18(Arg0),value24(Arg1).
+value25('java:TryStatement').
 position43(['uast:Position', 13, 10, 341]).
 position44(['uast:Position', 10, 12, 393]).
 positions33(['uast:Positions', Start, End]) :- position43(Start), position44(End).
-position45(['uast:Position', 13, 11, 355]).
-position46(['uast:Position', 41, 11, 383]).
+position45(['uast:Position', 24, 11, 366]).
+position46(['uast:Position', 39, 11, 381]).
 positions34(['uast:Positions', Start, End]) :- position45(Start), position46(End).
-array18([Arg0]) :- value6(Arg0).
-position47(['uast:Position', 16, 11, 358]).
-position48(['uast:Position', 23, 11, 365]).
+array20([Arg0,Arg1,Arg2]) :- value11(Arg0),value13(Arg1),value14(Arg2).
+value26('Hello, world!').
+object13(Obj) :- value16(Obj), !.
+object13(Obj) :- value26(Obj), !.
+object13(Obj) :- positions34(Obj), !.
+object13(Obj) :- array20(Obj), !.
+object13(Obj) :- value15(Obj), !.
+array21([Arg0]) :- object13(Arg0).
+position47(['uast:Position', 13, 11, 355]).
+position48(['uast:Position', 40, 11, 382]).
 positions35(['uast:Positions', Start, End]) :- position47(Start), position48(End).
-identifier12(['uast:Identifier', 'println', Pos, [Role0]]) :- positions35(Pos),role0(Role0).
-position49(['uast:Position', 15, 11, 357]).
-positions36(['uast:Positions', Start, End]) :- position45(Start), position49(End).
-identifier13(['uast:Identifier', 'pw', Pos, [Role0]]) :- positions36(Pos),role0(Role0).
-position50(['uast:Position', 24, 11, 366]).
-position51(['uast:Position', 39, 11, 381]).
-positions37(['uast:Positions', Start, End]) :- position50(Start), position51(End).
-array19([Arg0,Arg1,Arg2]) :- value8(Arg0),value9(Arg1),value10(Arg2).
-value24('Hello, world!').
-object13(Obj) :- !,positions37(Obj);array19(Obj);value11(Obj);value12(Obj);value24(Obj).
-array20([Arg0]) :- object13(Arg0).
-position52(['uast:Position', 40, 11, 382]).
-positions38(['uast:Positions', Start, End]) :- position45(Start), position52(End).
-array21([Arg0,Arg1]) :- value14(Arg0),value8(Arg1).
-object14(Obj) :- !,value15(Obj);identifier12(Obj);identifier13(Obj);array20(Obj);positions38(Obj);array21(Obj).
-object15(Obj) :- !,positions34(Obj);array18(Obj);value7(Obj);object14(Obj).
-block1(['uast:Block', [Stmt0], Pos]) :- positions33(Pos),object15(Stmt0).
-object16(Obj) :- !,block0(Obj);positions32(Obj);array17(Obj);value23(Obj);block1(Obj).
-block2(['uast:Block', [Stmt0,Stmt1,Stmt2], Pos]) :- positions12(Pos),object5(Stmt0),object10(Stmt1),object16(Stmt2).
-positions39(['uast:Positions', _, _]).
-function0(['uast:Function', FnType, Body, Pos]) :- function_type0(FnType),block2(Body),positions39(Pos).
-position53(['uast:Position', 17, 6, 117]).
-position54(['uast:Position', 24, 6, 124]).
-positions40(['uast:Positions', Start, End]) :- position53(Start), position54(End).
-identifier14(['uast:Identifier', 'service', Pos, [Role0]]) :- positions40(Pos),role0(Role0).
-alias0(['uast:Alias', Name, Node, Pos]) :- identifier14(Name),function0(Node),positions2(Pos).
-position55(['uast:Position', 12, 7, 198]).
-position56(['uast:Position', 28, 7, 214]).
-positions41(['uast:Positions', Start, End]) :- position55(Start), position56(End).
-identifier15(['uast:Identifier', 'ServletException', Pos, [Role0]]) :- positions41(Pos),role0(Role0).
-positions42(['uast:Positions', Start, End]) :- position55(Start), position56(End).
-array22([Arg0]) :- value4(Arg0).
-object17(Obj) :- !,value5(Obj);identifier15(Obj);positions42(Obj);array22(Obj).
-position57(['uast:Position', 30, 7, 216]).
-position58(['uast:Position', 41, 7, 227]).
-positions43(['uast:Positions', Start, End]) :- position57(Start), position58(End).
-array23([Arg0]) :- value4(Arg0).
-positions44(['uast:Positions', Start, End]) :- position57(Start), position58(End).
-identifier16(['uast:Identifier', 'IOException', Pos, [Role0]]) :- positions44(Pos),role0(Role0).
-object18(Obj) :- !,positions43(Obj);array23(Obj);value5(Obj);identifier16(Obj).
-array24([Arg0,Arg1]) :- object17(Arg0),object18(Arg1).
-value25('false').
-object19(Obj) :- !,array24(Obj);value25(Obj).
-function_group0(['uast:FunctionGroup', [Node0,Node1,Node2], Pos]) :- positions0(Pos),array1(Node0),alias0(Node1),object19(Node2).
-array25([Arg0]) :- function_group0(Arg0).
-position59(['uast:Position', 14, 5, 70]).
-position60(['uast:Position', 19, 5, 75]).
-positions45(['uast:Positions', Start, End]) :- position59(Start), position60(End).
-identifier17(['uast:Identifier', 'Hello', Pos, [Role0]]) :- positions45(Pos),role0(Role0).
-position61(['uast:Position', 28, 5, 84]).
-position62(['uast:Position', 42, 5, 98]).
-positions46(['uast:Positions', Start, End]) :- position61(Start), position62(End).
-array26([Arg0]) :- value4(Arg0).
-positions47(['uast:Positions', Start, End]) :- position61(Start), position62(End).
-identifier18(['uast:Identifier', 'GenericServlet', Pos, [Role0]]) :- positions47(Pos),role0(Role0).
-object20(Obj) :- !,positions46(Obj);array26(Obj);value5(Obj);identifier18(Obj).
-position63(['uast:Position', 1, 5, 57]).
-position64(['uast:Position', 2, 16, 445]).
-positions48(['uast:Positions', Start, End]) :- position63(Start), position64(End).
-value26('java:TypeDeclaration').
-position65(['uast:Position', 7, 5, 63]).
-positions49(['uast:Positions', Start, End]) :- position63(Start), position65(End).
-array27([Arg0,Arg1]) :- value0(Arg0),value1(Arg1).
-object21(Obj) :- !,positions49(Obj);array27(Obj);value2(Obj);value3(Obj).
-array28([Arg0]) :- object21(Arg0).
-array29([Arg0,Arg1,Arg2,Arg3]) :- value0(Arg0),value1(Arg1),value20(Arg2),value4(Arg3).
-object22(Obj) :- !,array25(Obj);identifier17(Obj);object20(Obj);positions48(Obj);value26(Obj);array28(Obj);array29(Obj);value25(Obj).
+array22([Arg0,Arg1]) :- value10(Arg0),value11(Arg1).
+position49(['uast:Position', 16, 11, 358]).
+position50(['uast:Position', 23, 11, 365]).
+positions36(['uast:Positions', Start, End]) :- position49(Start), position50(End).
+identifier12(['uast:Identifier', 'println', Pos, [Role0]]) :- positions36(Pos),role0(Role0).
+position51(['uast:Position', 15, 11, 357]).
+positions37(['uast:Positions', Start, End]) :- position47(Start), position51(End).
+identifier13(['uast:Identifier', 'pw', Pos, [Role0]]) :- positions37(Pos),role0(Role0).
+object14(Obj) :- value12(Obj), !.
+object14(Obj) :- identifier12(Obj), !.
+object14(Obj) :- identifier13(Obj), !.
+object14(Obj) :- array21(Obj), !.
+object14(Obj) :- positions35(Obj), !.
+object14(Obj) :- array22(Obj), !.
+position52(['uast:Position', 41, 11, 383]).
+positions38(['uast:Positions', Start, End]) :- position47(Start), position52(End).
+array23([Arg0]) :- value18(Arg0).
+object15(Obj) :- value9(Obj), !.
+object15(Obj) :- object14(Obj), !.
+object15(Obj) :- positions38(Obj), !.
+object15(Obj) :- array23(Obj), !.
+block0(['uast:Block', [Stmt0], Pos]) :- positions33(Pos),object15(Stmt0).
+position53(['uast:Position', 19, 12, 402]).
+positions39(['uast:Positions', Start, End]) :- position53(Start), position42(End).
+position54(['uast:Position', 13, 13, 416]).
+position55(['uast:Position', 24, 13, 427]).
+positions40(['uast:Positions', Start, End]) :- position54(Start), position55(End).
+array24([Arg0]) :- value18(Arg0).
+position56(['uast:Position', 23, 13, 426]).
+positions41(['uast:Positions', Start, End]) :- position54(Start), position56(End).
+array25([Arg0,Arg1]) :- value10(Arg0),value11(Arg1).
+position57(['uast:Position', 16, 13, 419]).
+position58(['uast:Position', 21, 13, 424]).
+positions42(['uast:Positions', Start, End]) :- position57(Start), position58(End).
+identifier14(['uast:Identifier', 'close', Pos, [Role0]]) :- positions42(Pos),role0(Role0).
+position59(['uast:Position', 15, 13, 418]).
+positions43(['uast:Positions', Start, End]) :- position54(Start), position59(End).
+identifier15(['uast:Identifier', 'pw', Pos, [Role0]]) :- positions43(Pos),role0(Role0).
+object16(Obj) :- positions41(Obj), !.
+object16(Obj) :- array25(Obj), !.
+object16(Obj) :- value12(Obj), !.
+object16(Obj) :- identifier14(Obj), !.
+object16(Obj) :- identifier15(Obj), !.
+object17(Obj) :- value9(Obj), !.
+object17(Obj) :- object16(Obj), !.
+object17(Obj) :- positions40(Obj), !.
+object17(Obj) :- array24(Obj), !.
+block1(['uast:Block', [Stmt0], Pos]) :- positions39(Pos),object17(Stmt0).
+object18(Obj) :- positions32(Obj), !.
+object18(Obj) :- array19(Obj), !.
+object18(Obj) :- value25(Obj), !.
+object18(Obj) :- block0(Obj), !.
+object18(Obj) :- block1(Obj), !.
+block2(['uast:Block', [Stmt0,Stmt1,Stmt2], Pos]) :- positions17(Pos),object7(Stmt0),object12(Stmt1),object18(Stmt2).
+positions44(['uast:Positions', _, _]).
+function0(['uast:Function', FnType, Body, Pos]) :- function_type0(FnType),block2(Body),positions44(Pos).
+position60(['uast:Position', 17, 6, 117]).
+position61(['uast:Position', 24, 6, 124]).
+positions45(['uast:Positions', Start, End]) :- position60(Start), position61(End).
+identifier16(['uast:Identifier', 'service', Pos, [Role0]]) :- positions45(Pos),role0(Role0).
+alias0(['uast:Alias', Name, Node, Pos]) :- identifier16(Name),function0(Node),positions7(Pos).
+position62(['uast:Position', 12, 7, 198]).
+position63(['uast:Position', 28, 7, 214]).
+positions46(['uast:Positions', Start, End]) :- position62(Start), position63(End).
+array26([Arg0]) :- value3(Arg0).
+positions47(['uast:Positions', Start, End]) :- position62(Start), position63(End).
+identifier17(['uast:Identifier', 'ServletException', Pos, [Role0]]) :- positions47(Pos),role0(Role0).
+object19(Obj) :- positions46(Obj), !.
+object19(Obj) :- array26(Obj), !.
+object19(Obj) :- value8(Obj), !.
+object19(Obj) :- identifier17(Obj), !.
+position64(['uast:Position', 30, 7, 216]).
+position65(['uast:Position', 41, 7, 227]).
+positions48(['uast:Positions', Start, End]) :- position64(Start), position65(End).
+array27([Arg0]) :- value3(Arg0).
+positions49(['uast:Positions', Start, End]) :- position64(Start), position65(End).
+identifier18(['uast:Identifier', 'IOException', Pos, [Role0]]) :- positions49(Pos),role0(Role0).
+object20(Obj) :- array27(Obj), !.
+object20(Obj) :- value8(Obj), !.
+object20(Obj) :- identifier18(Obj), !.
+object20(Obj) :- positions48(Obj), !.
+array28([Arg0,Arg1]) :- object19(Arg0),object20(Arg1).
+object21(Obj) :- value5(Obj), !.
+object21(Obj) :- array28(Obj), !.
+function_group0(['uast:FunctionGroup', [Node0,Node1,Node2], Pos]) :- positions5(Pos),array5(Node0),alias0(Node1),object21(Node2).
+array29([Arg0]) :- function_group0(Arg0).
+object22(Obj) :- array2(Obj), !.
+object22(Obj) :- positions1(Obj), !.
+object22(Obj) :- identifier0(Obj), !.
+object22(Obj) :- object1(Obj), !.
+object22(Obj) :- array29(Obj), !.
+object22(Obj) :- array0(Obj), !.
+object22(Obj) :- value4(Obj), !.
+object22(Obj) :- value5(Obj), !.
 array30([Arg0]) :- object22(Arg0).
 position66(['uast:Position', 1, 1, 0]).
-position67(['uast:Position', 1, 19, 448]).
+position67(['uast:Position', 1, 17, 446]).
 positions50(['uast:Positions', Start, End]) :- position66(Start), position67(End).
 value27('File').
 array31([Arg0]) :- value27(Arg0).
@@ -2250,7 +2457,12 @@ identifier22(['uast:Identifier', 'servlet', Pos, [Role0]]) :- positions59(Pos),r
 qualified_identifier1(['uast:QualifiedIdentifier', [Name0,Name1], Pos]) :- positions57(Pos),identifier21(Name0),identifier22(Name1).
 import1(['uast:Import', Path, Pos]) :- qualified_identifier1(Path),positions56(Pos).
 array33([Arg0,Arg1]) :- import0(Arg0),import1(Arg1).
-object23(Obj) :- !,array30(Obj);positions50(Obj);array31(Obj);value28(Obj);array32(Obj);array33(Obj).
+object23(Obj) :- array30(Obj), !.
+object23(Obj) :- positions50(Obj), !.
+object23(Obj) :- array31(Obj), !.
+object23(Obj) :- value28(Obj), !.
+object23(Obj) :- array32(Obj), !.
+object23(Obj) :- array33(Obj), !.
 
 % value(Val).
 value(X) :- value0(X);value1(X);value2(X);value3(X);value4(X);value5(X);value6(X);value7(X);value8(X);value9(X);value10(X);value11(X);value12(X);value13(X);value14(X);value15(X);value16(X);value17(X);value18(X);value19(X);value20(X);value21(X);value22(X);value23(X);value24(X);value25(X);value26(X);value27(X);value28(X).
