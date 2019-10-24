@@ -6,3 +6,8 @@ merge([Head | Tail], List, [Head | NewList]) :- !, merge(Tail, List, NewList).
 flatten([Head | Tail], FlatList) :- !, flatten(Head, HeadFlatList), flatten(Tail, TailFlatList), merge(HeadFlatList, TailFlatList, FlatList).
 flatten(Elem, [Elem]) :- !.
 flatten([], []) :- !.
+
+% reverse succeeds if Rev is the reversed list List.
+reverse(List, Rev) :- reverse(List, Rev, []).
+reverse([], List, List) :- !.
+reverse([Head | Tail], List, Stack) :- reverse(Tail, List, [Head | Stack]).

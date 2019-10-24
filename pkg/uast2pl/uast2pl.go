@@ -286,27 +286,31 @@ func (pl *uast2pl) writeObject(obj nodes.Object) (string, error) {
 
 	default:
 		format := "%s(Obj)"
-		var objects []string
+		var objects = make(map[string]struct{})
 		for _, n := range obj {
 			o, err := pl.writeNode(n)
 			if err != nil {
 				return "_", err
 			}
 			if o != "_" {
-				objects = append(objects, fmt.Sprintf("%s(Obj)", o))
+				objects[o] = struct{}{}
 			}
-		}
-		if len(objects) == 0 {
-			format = strings.Replace(format, "Obj", "_", 1)
-		} else {
-			format += " :- !," + strings.Join(objects, ";")
 		}
 
 		fn := fmt.Sprintf("object%d", len(pl.objects))
-		_, err := fmt.Fprintf(pl.w, format+".\n", fn)
-		if err != nil {
-			return "_", err
+		if len(objects) == 0 {
+			format = strings.Replace(format, "Obj", "_", 1)
+			if _, err := fmt.Fprintf(pl.w, format+".\n", fn); err != nil {
+				return "_", err
+			}
+		} else {
+			for o := range objects {
+				if _, err := fmt.Fprintf(pl.w, format+" :- "+format+", !.\n", fn, o); err != nil {
+					return "_", err
+				}
+			}
 		}
+
 		pl.objects = append(pl.objects, fn)
 		return fn, nil
 	}
