@@ -9,6 +9,7 @@ github.com/Microsoft/go-winio v0.4.8/go.mod h1:VhR8bwka0BXejwEJY73c50VrPtXAaKcyv
 github.com/Microsoft/go-winio v0.4.13/go.mod h1:qXqCSQ3Xa7+6tgxaGTIe4Kpcdsi+P8jBhyzoq1bpyYA=
 github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5/go.mod h1:lmUJ/7eu/Q8D7ML55dXQrVaamCz2vxCfdQBasLZfHKk=
 github.com/antchfx/xpath v0.0.0-20180922041825-3de91f3991a1/go.mod h1:Yee4kTMuNiPYJ7nSNorELQMr1J33uOpXDMByNYhvtNk=
+github.com/antchfx/xpath v0.0.0-20190319080838-ce1d48779e67 h1:uj4UuiIs53RhHSySIupR1TEIouckjSfnljF3QbN1yh0=
 github.com/antchfx/xpath v0.0.0-20190319080838-ce1d48779e67/go.mod h1:Yee4kTMuNiPYJ7nSNorELQMr1J33uOpXDMByNYhvtNk=
 github.com/bblfsh/go-client/v4 v4.1.0 h1:z9S5GrUSB0uiipbWauc5fV6D/R0LNBi65dhfP5uh3kw=
 github.com/bblfsh/go-client/v4 v4.1.0/go.mod h1:UUAG7jrxSr7WHlFL/U8den1kLHfysZWJ9jA1Y0IiQ+0=

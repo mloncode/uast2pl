@@ -1,12 +1,10 @@
-% join_ is a private predicate - the same predicate as stdlib's append/3 or merge/3 (from list module).
-join_([], List, List).
-join_([Head | Tail], List, [Head | NewList]) :- !, join_(Tail, List, NewList).
+:- use_module(library(lists)).
 
 % extract_id_name_ is a private predicate - modified version of flatten/2 (from list module).
 % It just extracts 'Name' from identifier tuple.
 extract_id_name_([], []).
 extract_id_name_([['uast:Identifier', Name, _, ['Identifier']] | TailList], [Name | List]) :- \+ var(Name), extract_id_name_(TailList, List), !.
-extract_id_name_([Head | Tail], List) :- extract_id_name_(Head, HeadList), extract_id_name_(Tail, TailList), join_(HeadList, TailList, List), !.
+extract_id_name_([Head | Tail], List) :- extract_id_name_(Head, HeadList), extract_id_name_(Tail, TailList), append(HeadList, TailList, List), !.
 extract_id_name_(_, []).
 
 

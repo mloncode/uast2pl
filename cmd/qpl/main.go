@@ -24,16 +24,43 @@ func (l *stringList) Set(value string) error {
 	return nil
 }
 
+const (
+
+	// :- use_module(library(lists)).
+	lists = `
+		append([], L, L).
+		append([H|T], L, [H|R]) :- append(T, L, R).
+
+		flatten(List, FlatList) :- flatten(List, [], FlatList0), !, FlatList=FlatList0.
+
+		flatten(Var, Tl, [Var|Tl]) :- var(Var), !.
+		flatten([], Tl, Tl) :- !.
+		flatten([Hd|Tl], Tail, List) :- !, flatten(Hd, FlatHeadTail, List), flatten(Tl, Tail, FlatHeadTail).
+		flatten(NonList, Tl, [NonList|Tl]).
+
+		reverse(Xs, Ys) :- reverse(Xs, [], Ys, Ys).
+		reverse([], Ys, Ys, []).
+		reverse([X|Xs], Rs, Ys, [_|Bound]) :- reverse(Xs, [X|Rs], Ys, Bound).
+	`
+)
+
 var (
 	files  stringList
 	query  string
 	output string
+
+	wam prolog.Machine
 )
 
 func init() {
 	flag.Var(&files, "f", "list of input prolog files")
 	flag.StringVar(&query, "q", "", "prolog query")
 	flag.StringVar(&output, "o", "", "output file (by default stdio)")
+
+	stdlib := strings.Join([]string{
+		lists,
+	}, "\n\n")
+	wam = prolog.NewMachine().Consult(stdlib)
 }
 
 func main() {
@@ -53,7 +80,7 @@ func main() {
 		}
 	}
 
-	wam, err := consult(files)
+	err := consult(files)
 	if err != nil {
 		panic(err)
 	}
@@ -63,7 +90,7 @@ func main() {
 		panic(err)
 	}
 
-	err = proveAll(wam, query, vars, func(v string, t term.Term) {
+	err = proveAll(query, vars, func(v string, t term.Term) {
 		io.WriteString(w, fmt.Sprintf("%s = %s\n", v, t))
 	})
 	if err != nil {
@@ -72,13 +99,11 @@ func main() {
 	io.WriteString(w, "\n")
 }
 
-func consult(src []string) (prolog.Machine, error) {
-	wam := prolog.NewMachine()
-
+func consult(src []string) error {
 	for _, name := range src {
 		f, err := os.Open(name)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		wam = wam.Consult(f)
@@ -87,7 +112,7 @@ func consult(src []string) (prolog.Machine, error) {
 			log.Println(err)
 		}
 	}
-	return wam, nil
+	return nil
 }
 
 func variables(src string) ([]string, error) {
@@ -113,7 +138,7 @@ func variables(src string) ([]string, error) {
 	return vars, nil
 }
 
-func proveAll(wam prolog.Machine, q string, vars []string, call func(v string, t term.Term)) error {
+func proveAll(q string, vars []string, call func(v string, t term.Term)) error {
 	for _, s := range wam.ProveAll(q) {
 		for _, v := range vars {
 			if v == "_" {
