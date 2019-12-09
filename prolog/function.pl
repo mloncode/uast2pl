@@ -20,4 +20,4 @@ extract_fn_args_(FnGroup, Args) :- extract_fntype_arg_(FnGroup, FnArgs), extract
 
 % function_arg extracts function name and function arguments for each function_group.
 % It returns Fn as a atomic value and Args as a list of names.
-function_arg(Fn, Args) :- function_group(FnGroup), extract_fn_name_(FnGroup, [Fn]), extract_fn_args_(FnGroup, Args).
+fn_arg(Fn, Args) :- function_group(FnGroup), extract_fn_name_(FnGroup, [Fn]), extract_fn_args_(FnGroup, Args).
