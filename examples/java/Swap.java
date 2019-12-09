@@ -1,4 +1,4 @@
-public class SwapElementsExample {
+public class Swap {
 
          public static void main(String[] args) {
 

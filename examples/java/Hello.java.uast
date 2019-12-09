@@ -30,7 +30,7 @@
          Prefix: " ",
          Suffix: "",
          Tab: "",
-         Text: "hello.java",
+         Text: "Hello.java",
       },
    ],
    imports: [
