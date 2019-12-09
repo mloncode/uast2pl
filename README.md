@@ -1121,9 +1121,9 @@ Args = [n,a,b]
 
 
 ### Example (extract import paths)
-For a given `examples/java/hello.java` file:
+For a given `examples/java/Hello.java` file:
 ```java
-// hello.java
+// Hello.java
 import java.io.*;
 import javax.servlet.*;
 
@@ -1178,7 +1178,7 @@ public class Hello extends GenericServlet {
          Prefix: " ",
          Suffix: "",
          Tab: "",
-         Text: "hello.java",
+         Text: "Hello.java",
       },
    ],
    imports: [
@@ -2426,7 +2426,7 @@ array31([Arg0]) :- value27(Arg0).
 value28('java:CompilationUnit').
 position68(['uast:Position', 14, 1, 13]).
 positions51(['uast:Positions', Start, End]) :- position66(Start), position68(End).
-comment0(['uast:Comment', ' ', '', '', 'hello.java', false, Pos]) :- positions51(Pos).
+comment0(['uast:Comment', ' ', '', '', 'Hello.java', false, Pos]) :- positions51(Pos).
 array32([Arg0]) :- comment0(Arg0).
 position69(['uast:Position', 1, 2, 14]).
 position70(['uast:Position', 18, 2, 31]).
@@ -2537,7 +2537,7 @@ A `prolog/import.pl` file contains a few prolog _helpers_ which let you extract 
 We can load `prolog/import.pl` module and use `import_path/1` predicate:
 
 ```bash
-./qpl -f ./examples/java/hello.java.pl -f ./prolog/import.pl -q "import_path(Path)."
+./qpl -f ./examples/java/Hello.java.pl -f ./prolog/import.pl -q "import_path(Path)."
 
 Path = [java,io]
 

@@ -1755,7 +1755,7 @@
                   col: 33,
                },
             },
-            Name: "SwapElementsExample",
+            Name: "Swap",
          },
          superInterfaceTypes: ~,
          superclassType: ~,

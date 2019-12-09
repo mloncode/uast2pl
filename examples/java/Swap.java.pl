@@ -682,7 +682,7 @@ array70([Arg0,Arg1,Arg2,Arg3]) :- value1(Arg0),value2(Arg1),value14(Arg2),value7
 position139(['uast:Position', 14, 1, 13]).
 position140(['uast:Position', 33, 1, 32]).
 positions108(['uast:Positions', Start, End]) :- position139(Start), position140(End).
-identifier39(['uast:Identifier', 'SwapElementsExample', Pos, [Role0]]) :- positions108(Pos),role0(Role0).
+identifier39(['uast:Identifier', 'Swap', Pos, [Role0]]) :- positions108(Pos),role0(Role0).
 object57(Obj) :- value44(Obj), !.
 object57(Obj) :- array69(Obj), !.
 object57(Obj) :- positions107(Obj), !.
